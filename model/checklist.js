@@ -2,14 +2,8 @@ const mongoose = require('mongoose');
 
 const ChecklistSchema = new mongoose.Schema({
     title: String,
-    board: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Board'
-    },
-    card: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Card' 
-    },
+    board: { type: Schema.Types.ObjectId, ref: 'Board' },
+    card: { type: Schema.Types.ObjectId, ref: 'Card' },
     position: Number,
     items: [{
         complete: Boolean,
@@ -18,5 +12,5 @@ const ChecklistSchema = new mongoose.Schema({
     }]
 });
 
-const Checklist = mongoose.model('Card', ChecklistSchema)
+const Checklist = mongoose.model('Checklist', ChecklistSchema)
 module.exports = Checklist;
