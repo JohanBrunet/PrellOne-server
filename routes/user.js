@@ -1,15 +1,12 @@
 // Route for Accessing User Data via Restful API
 
-const express = require('express');
-var router = express.Router();
-var crypto = require('crypto'),
-  algorithm = 'aes-256-ctr',
-  password = process.env.CRYPTO_SECRET;
-var auth = require('./authentification');
-var User = require('../controllers/userController');
+const router = require('express').Router();
+const auth = require('./authentification');
+const asyncWrapper = require('../middlewares/asyncWrapper')
+const User = require('../controllers/userController');
 
 /* GET ALL USERS */
-router.get('/', auth, AsyncMiddleware( async (req, res, next) => {
+router.get('/', auth, asyncWrapper( async (req, res, next) => {
     const users = await User.getAll();
 
     res.type('application/json');
@@ -18,7 +15,7 @@ router.get('/', auth, AsyncMiddleware( async (req, res, next) => {
 }));
 
 /* GET SINGLE USER BY ID */
-router.get('/', auth, AsyncMiddleware( async (req, res, next) => {
+router.get('/', auth, asyncWrapper( async (req, res, next) => {
     const user = await User.getById(req.params.id);
 
     res.type('application/json');

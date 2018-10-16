@@ -1,6 +1,6 @@
+const router = require('express').Router;
 const authenticate = require('../middlewares/auth').doAuthentication;
 const AsyncMiddleware = require('../middlewares/asyncWrapper');
-const router = require('express').Router;
 
 module.exports = () => {
     
