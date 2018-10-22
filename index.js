@@ -33,7 +33,7 @@ mongoose.connect(databaseUrl, { useNewUrlParser: true })
   .catch((err) => console.error(err));
 
 // Logging middleware
-if (process.env.NODE_ENV == 'dev'){
+if (process.env.NODE_ENV == 'dev' || process.env.NODE_ENV == 'local'){
     const logger = require('morgan');
     app.use(logger('dev'));
 }
@@ -41,7 +41,7 @@ if (process.env.NODE_ENV == 'dev'){
 /**
  * Load routes
  */
-require('./routes/router');
+app.use('/', require('./routes/router'));
 
 if (env === 'production' ) {
     // production error handler

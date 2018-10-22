@@ -4,7 +4,7 @@ const saltRounds = 10;
 
 const randomSecretKey = process.env.SECRET_KEY;
 
-const UserController = require('../controllers/userController');
+const userController = require('../controllers/userController');
 
 
 /**
@@ -15,23 +15,21 @@ const UserController = require('../controllers/userController');
  */
 module.exports.doAuthentication = async (data) => {
 
-    const userController = new UserController();
-
-    let user = await userController.get('email', data.email);
-    if (!user) { 
+    let user = await userController.getByEmail(data.email);
+    if (!user || user.length == 0) { 
         noUser(); 
     }
 
     // if the user is found but the password is wrong
-    if (passwordMatch(data.password, user.password)) {
+    if (await passwordMatch(data.password, user.password)) {
         const token = createToken(user.id);
         return authorize(user, token);
     }
     else  {
         user = false;
-        console.error(err);
-        throw err;
+        unauthorize()
     };
+
 }
 
 /**
@@ -59,21 +57,19 @@ unauthorize = () => {
 }
 
 authorize = async (user, token) => {
-    let result = {}
-    result.user = await user.toJson();
-    delete result.user.password;
-    result.appAuthToken = token
-    return result;
+    delete user.password;
+    user.appAuthToken = token;
+    return user;
 }
 
-createToken = (object) => {
-    return jwt.sign(object, randomSecretKey);
+createToken = (userId) => {
+    return jwt.sign({'id': userId}, randomSecretKey);
 }
 
-hashPassword = async (plainPassword) => {
-    return await bcrypt.hash(plainPassword, saltRounds);
+module.exports.hashPassword = async (plainPassword) => {
+    return await bcrypt.hash(plainPassword, saltRounds).then( hash => hash);
 }
 
 passwordMatch = async (plainPassword, passwordHash) => {
-    return await bcrypt.compare(plainPassword, passwordHash);
+    return await bcrypt.compare(plainPassword, passwordHash);;
 }

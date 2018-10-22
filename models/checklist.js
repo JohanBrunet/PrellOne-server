@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const ChecklistSchema = new mongoose.Schema({
+const ChecklistSchema = new Schema({
     title: String,
     board: { type: Schema.Types.ObjectId, ref: 'Board' },
     card: { type: Schema.Types.ObjectId, ref: 'Card' },

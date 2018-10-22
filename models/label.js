@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const LabelSchema = new mongoose.Schema({
+const LabelSchema = new Schema({
     name: String,
     board: { type: Schema.Types.ObjectId,  ref: 'Board' },
     color: String

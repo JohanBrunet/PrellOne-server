@@ -1,12 +1,12 @@
 // Route for Accessing User Data via Restful API
 
 const router = require('express').Router();
-const auth = require('./authentification');
+const auth = require('../middlewares/authMiddleware').isAuthenticated;
 const asyncWrapper = require('../middlewares/asyncWrapper')
 const User = require('../controllers/userController');
 
 /* GET ALL USERS */
-router.get('/', auth, asyncWrapper( async (req, res, next) => {
+router.get('/', auth, asyncWrapper( async(req, res, next) => {
     const users = await User.getAll();
 
     res.type('application/json');
@@ -15,7 +15,7 @@ router.get('/', auth, asyncWrapper( async (req, res, next) => {
 }));
 
 /* GET SINGLE USER BY ID */
-router.get('/', auth, asyncWrapper( async (req, res, next) => {
+router.get('/:id', auth, asyncWrapper( async(req, res, next) => {
     const user = await User.getById(req.params.id);
 
     res.type('application/json');
@@ -24,23 +24,6 @@ router.get('/', auth, asyncWrapper( async (req, res, next) => {
 }));
 
 // TODO: update signin, modifiy user and delete user
-
-/* SAVE USER */
-// router.post('/register', function (req, res, next) {
-//   User.findOne({ email: req.body.email }, function (err, user) {
-//     if (user) {
-//       res.status(400);
-//       res.json({ msg: 'The email address you have entered is already associated with another account.' });
-//     }
-//     else {
-//       req.body.pwd = auth.encrypt(req.body.pwd);
-//       User.create(req.body, function (err, post) {
-//         if (err) return next(err);
-//         res.json({ token: auth.generateToken(post._id), user: post });
-//       });
-//     }
-//   });
-// });
 
 /* UPDATE USER */
 // router.put('/:id', function (req, res, next) {

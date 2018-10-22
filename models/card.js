@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const CardSchema = new mongoose.Schema({
+const CardSchema = new Schema({
     title: String,
     description: String,
     board: { type: Schema.Types.ObjectId, ref: 'Board'},
@@ -9,8 +10,8 @@ const CardSchema = new mongoose.Schema({
     dueDate: Date,
     closed: Boolean,
     checklists: [{ type: Schema.Types.ObjectId, ref: 'Checklist' }],
-    labels = [{ type: Schema.Types.ObjectId, ref: 'Label' }],
-    members = [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    labels: [{ type: Schema.Types.ObjectId, ref: 'Label' }],
+    members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     attachments: [{
         name: String,
         owner: { type: Schema.Types.ObjectId, ref: 'User' },
