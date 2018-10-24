@@ -5,7 +5,7 @@ const LabelSchema = new Schema({
     name: String,
     board: { type: Schema.Types.ObjectId,  ref: 'Board' },
     color: String
-});
+}, { timestamps: true });
 
 const Label = mongoose.model('Label', LabelSchema)
 module.exports = Label;

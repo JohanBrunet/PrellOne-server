@@ -10,7 +10,7 @@ const BoardSchema = new Schema({
     members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     teams: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 const Board = mongoose.model('Board', BoardSchema)
 module.exports = Board;

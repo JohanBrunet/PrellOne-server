@@ -9,7 +9,7 @@ const TeamSchema = new Schema({
     admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 const Team = mongoose.model('Team', TeamSchema)
 module.exports = Team;

@@ -21,7 +21,7 @@ const CardSchema = new Schema({
         url: String
     }],
     createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 const Card = mongoose.model('Card', CardSchema)
 module.exports = Card;

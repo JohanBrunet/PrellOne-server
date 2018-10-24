@@ -7,7 +7,7 @@ const ListSchema = new Schema({
     cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
     position: Number,
     createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 const List = mongoose.model('List', ListSchema)
 module.exports = List;
