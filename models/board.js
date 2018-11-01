@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BoardSchema = new Schema({
-    title: String,
+    title: {
+        type: String,
+        required: true
+    },
     description: String,
     lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
     labels: [{ type: Schema.Types.ObjectId, ref: 'Label' }],

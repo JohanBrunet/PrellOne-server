@@ -20,6 +20,11 @@ const CardSchema = new Schema({
         pos: Number,
         url: String
     }],
+    comments: [{
+        text: String,
+        writer: { type: Schema.Types.ObjectId, ref: 'User' },
+        addedAt: { type: Date, default: Date.now }
+    }],
     createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 

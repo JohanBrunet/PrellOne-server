@@ -14,46 +14,47 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    initials: {
+        type: String
+    },
     email: {
         type: String,
         required: true
     },
     password: {
-        type: String
+        type: String,
+        required: true,
+        select: false
     },
     loginType: {type: String, enum: ['classic', 'ldap', 'oauth'], default: 'classic'},
     boards: [{ type: Schema.Types.ObjectId, ref: 'Board' }],
+    teams: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
     createdAt: { type: Date, default: Date.now }
-}, { timestamps: true });
+}, { timestamps: true })
 
 UserSchema.pre('save', async function(next) {
     const user = await mongoose.model('User', UserSchema).findOne({email: this.email});
-    if(user) {
-        let err = new Error("This email already exists!")
-        err.statusCode = 400
-        throw err
-    }
+    if(user) throwError(400, "This email already exists!")
     next()
 })
-
-UserSchema.pre('save', async function(next) {
+.pre('save', async function(next) {
     const user = await mongoose.model('User', UserSchema).findOne({username: this.username});
-    if(user) {
-        let err = new Error("This username is already taken!")
-        err.statusCode = 400
-        throw err
-    }
+    if(user) throwError(400, "This username is already taken!")
     next()
 })
+// .post('save', async function(next) {
+
+// })
 
 UserSchema.options.toJSON = {
     transform: function(doc, ret, options) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-        return ret;
+        ret.id = ret._id
+        delete ret._id
+        delete ret.__v
+        return ret
     }
 };
 
 const User = mongoose.model('User', UserSchema)
-module.exports = User;
+
+module.exports = User

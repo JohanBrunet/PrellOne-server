@@ -23,7 +23,7 @@ router.get('/:id', auth, asyncWrapper( async(req, res, next) => {
     res.json(user);
 }));
 
-// TODO: update signin, modifiy user and delete user
+// TODO: update user and delete user
 
 /* UPDATE USER */
 // router.put('/:id', function (req, res, next) {

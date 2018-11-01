@@ -29,8 +29,8 @@ const appConfig = require('./config/api')
 // Connect to db
 const databaseUrl = `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 mongoose.connect(databaseUrl, { useNewUrlParser: true })
-  .then(() => console.log('Connection to database succesful'))
-  .catch((err) => console.error(err));
+.then(() => console.log('Connection to database succesful'))
+.catch((err) => console.error(err));
 
 // Logging middleware
 if (process.env.NODE_ENV == 'dev' || process.env.NODE_ENV == 'local'){
@@ -41,26 +41,25 @@ if (process.env.NODE_ENV == 'dev' || process.env.NODE_ENV == 'local'){
 /**
  * Load routes
  */
-app.use('/', require('./routes/router'));
+app.use('/api', require('./routes/router'));
 
+// Error handlers
 if (env === 'production' ) {
-    // production error handler
     // no stacktraces leaked to user
     app.use( (err, req, res, next) => {
-        res.status(err.statusCode || 500);
+        res.status(err.status || 500);
         res.send({
-            message: err.message,
+            message: err.status != 500 ? err.message : "Internal server error",
             error: {}
         });
     });
 } else {
-    // development error handler
-    // will print stacktrace
+    // will print stacktrace for debug purpose
     app.use( (err, req, res, next) => {
 
         console.error(err);
 
-        res.status(err.statusCode || 500);
+        res.status(err.status || 500);
         res.send({
             message: err.message,
             error: err
