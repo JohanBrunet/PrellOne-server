@@ -27,10 +27,22 @@ dotenv.load();
 const appConfig = require('./config/api')
 
 // Connect to db
-const databaseUrl = `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+const databaseUrl = `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?replicaSet=rs`
 mongoose.connect(databaseUrl, { useNewUrlParser: true })
-.then(() => console.log('Connection to database succesful'))
+.then(() => {
+    console.log('Connection to database succesful')
+})
 .catch((err) => console.error(err));
+
+// Create collections (and seed DB if not in production env)
+const initDB = require('./utils/initDB').initDB
+mongoose.connection.once('open', async function() {
+    await initDB()
+})
+
+const aws = require('./utils/aws')
+
+aws.uploadFile('package.json').then( url => console.log(url) ).catch( err => console.error(err) )
 
 // Logging middleware
 if (process.env.NODE_ENV == 'dev' || process.env.NODE_ENV == 'local'){

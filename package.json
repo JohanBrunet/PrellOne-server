@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JohanBrunet/closemap#readme",
   "dependencies": {
+    "aws-sdk": "^2.347.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",

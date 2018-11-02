@@ -17,6 +17,9 @@ const UserSchema = new Schema({
     initials: {
         type: String
     },
+    profilePicture: {
+        type: String
+    },
     email: {
         type: String,
         required: true
@@ -26,25 +29,32 @@ const UserSchema = new Schema({
         required: true,
         select: false
     },
-    loginType: {type: String, enum: ['classic', 'ldap', 'oauth'], default: 'classic'},
-    boards: [{ type: Schema.Types.ObjectId, ref: 'Board' }],
-    teams: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
-    createdAt: { type: Date, default: Date.now }
-}, { timestamps: true })
+    loginType: {
+        type: String, 
+        enum: ['classic', 'ldap', 'oauth'], 
+        default: 'classic'
+    },
+    boards: [{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'Board' 
+    }],
+    teams: [{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'Team' 
+    }]
+}, 
+{ timestamps: true })
 
 UserSchema.pre('save', async function(next) {
-    const user = await mongoose.model('User', UserSchema).findOne({email: this.email});
+    const user = await mongoose.model('user').findOne({email: this.email});
     if(user) throwError(400, "This email already exists!")
     next()
 })
 .pre('save', async function(next) {
-    const user = await mongoose.model('User', UserSchema).findOne({username: this.username});
+    const user = await mongoose.model('user').findOne({username: this.username});
     if(user) throwError(400, "This username is already taken!")
     next()
 })
-// .post('save', async function(next) {
-
-// })
 
 UserSchema.options.toJSON = {
     transform: function(doc, ret, options) {
@@ -55,6 +65,11 @@ UserSchema.options.toJSON = {
     }
 };
 
-const User = mongoose.model('User', UserSchema)
-
+let User
+try {
+    User = mongoose.model('User', UserSchema)
+}
+catch(e) {
+    User = mongoose.model('User')
+}
 module.exports = User

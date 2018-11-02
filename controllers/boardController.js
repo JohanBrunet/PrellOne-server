@@ -1,6 +1,7 @@
-const Board = require('../models/Board');
+const Board = require('../models/board');
 const UserController = require('./userController')
 const mongoose = require('mongoose')
+const throwError = require('../utils/throwError')
 
 let BoardController = () => {}
 
@@ -16,20 +17,21 @@ BoardController.getAll = () => {
 }
 
 BoardController.create = async(boardData, userId = null, teamId = null) => {
-    // const session = await mongoose.startSession()
-    // session.startTransaction()
+    const session = await mongoose.connection.startSession()
+    session.startTransaction()
     try {
-        const board = new Board(boardData);
-        const newBoard = await board.save()
+        const newBoard = await Board.create([boardData], { session: session })
+        console.log(newBoard[0])
         if(userId) UserController.addBoard(userId, newBoard.id, session)
-        // if(teamId) TeamController.addBoard(teamId, newBoard.id)
-        // session.commitTransaction()
-        // session.endSession()
-        return newBoard
+        if(teamId) TeamController.addBoard(teamId, newBoard.id)
+
+        await session.commitTransaction()
+        session.endSession()
+        return newBoard[0]
     }
     catch(error) {
-        // session.abortTransaction()
-        // session.endSession()
+        await session.abortTransaction()
+        session.endSession()
         throw error
     }
 }
@@ -42,13 +44,13 @@ BoardController.update = (board, data) => {
 
 BoardController.addList = async(boardId, listId) => {
     const query = {'id': boardId}
-    const update = { 
+    const update = {
         $push: {
             lists: listId
         } 
     }
     console.log(update)
-    const options = {new: true, upsert: true};
+    const options = {new: true, upsert: true}
     try {
         const board = await Board.findOneAndUpdate(query, update, options)
         console.log(board)

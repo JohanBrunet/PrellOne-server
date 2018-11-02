@@ -6,41 +6,50 @@ const ListSchema = new Schema({
         type: String,
         required: true
     },
-    board: { 
-        type: Schema.Types.ObjectId, 
+    board: {
+        type: Schema.Types.ObjectId,
         ref: 'Board',
         required: true
     },
-    cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
+    cards: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Card'
+    }],
     position: {
         type: Number,
         require: true
-    },
-    createdAt: { type: Date, default: Date.now }
-}, { timestamps: true });
-
-ListSchema.pre('save', async function(next) {
-    if(!this.position) {
-        const lastPosition = await mongoose.model('List', ListSchema).findOne({board: this.board}).sort({"-position": -1})
-        let min = 0
-        let max = 10000
-        if(!lastPosition) {
-            this.postion = getRandomInt(min, max)
-        }
-        else {
-            min = lastPosition
-            max = max + min
-            this.position = getRandomInt(min, max)
-        }
     }
-    next()
-})
+}, 
+{ timestamps: true });
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
+// ListSchema.pre('save', async function(next) {
+//     if(!this.position) {
+//         const lastPosition = await mongoose.model('List', ListSchema).findOne({board: this.board}).sort({"-position": -1})
+//         let min = 0
+//         let max = 10000
+//         if(!lastPosition) {
+//             this.postion = getRandomInt(min, max)
+//         }
+//         else {
+//             min = lastPosition
+//             max = max + min
+//             this.position = getRandomInt(min, max)
+//         }
+//     }
+//     next()
+// })
+
+// function getRandomInt(min, max) {
+//     min = Math.ceil(min);
+//     max = Math.floor(max);
+//     return Math.floor(Math.random() * (max - min)) + min;
+// }
+
+let List
+try {
+    List = mongoose.model('List', ListSchema)
 }
-
-const List = mongoose.model('List', ListSchema)
+catch(e) {
+    List = mongoose.model('List')
+}
 module.exports = List;
