@@ -1,4 +1,4 @@
-const List = require('../models/List');
+const List = require('../models/list');
 const BoardController = require('./boardController')
 const mongoose = require('mongoose')
 const throwError = require('../utils/throwError')
