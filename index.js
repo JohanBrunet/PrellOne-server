@@ -7,7 +7,8 @@ const express         = require('express'),
       dotenv          = require('dotenv'),
       mongoose        = require('mongoose'),
       helmet          = require('helmet'),
-      uuid            = require('uuid');
+      uuid            = require('uuid'),
+      cors            = require('cors');
 
 const app = express();
 const env = process.env.NODE_ENV;
@@ -18,6 +19,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use(cors())
+
 app.use(helmet());
 
 // Load environment variables from .env file
@@ -27,7 +30,10 @@ dotenv.load();
 const appConfig = require('./config/api')
 
 // Connect to db
-const databaseUrl = `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?replicaSet=rs`
+const databaseUrl = process.env.DB_USER != null && process.env.DB_USER != ""
+                    ? `mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+                    : `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+console.log(databaseUrl)
 mongoose.connect(databaseUrl, { useNewUrlParser: true })
 .then(() => {
     console.log('Connection to database succesful')
@@ -36,16 +42,18 @@ mongoose.connect(databaseUrl, { useNewUrlParser: true })
 
 // Create collections (and seed DB if not in production env)
 const initDB = require('./utils/initDB').initDB
-mongoose.connection.once('open', async function() {
+mongoose.connection.once('open', async() => {
     await initDB()
 })
 
-const aws = require('./utils/aws')
-
-aws.uploadFile('package.json').then( url => console.log(url) ).catch( err => console.error(err) )
+// const aws = require('./utils/aws')
+// const fs = require('fs')
+// fs.readFile('/Users/johan/Downloads/lapin.jpeg', (err, data) => {
+//     if(!err) aws.uploadProfilePicture('lapin.jpeg', data, 'johan')
+// })
 
 // Logging middleware
-if (process.env.NODE_ENV == 'dev' || process.env.NODE_ENV == 'local'){
+if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'local'){
     const logger = require('morgan');
     app.use(logger('dev'));
 }
