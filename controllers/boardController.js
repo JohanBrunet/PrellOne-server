@@ -16,22 +16,19 @@ BoardController.getAll = () => {
     return Board.find();
 }
 
-BoardController.create = async(boardData, userId = null, teamId = null) => {
-    const session = await mongoose.connection.startSession()
-    session.startTransaction()
+BoardController.create = async(boardData, ownerId, teamId = null) => {
+    const newBoard = new Board(boardData)
+    newBoard.owner = ownerId
+    const user = null
     try {
-        const newBoard = await Board.create([boardData], { session: session })
-        console.log(newBoard[0])
-        if(userId) UserController.addBoard(userId, newBoard.id, session)
+        user = UserController.addBoard(ownerId, newBoard.id)
         if(teamId) TeamController.addBoard(teamId, newBoard.id)
 
-        await session.commitTransaction()
-        session.endSession()
-        return newBoard[0]
+        throwError(500, "board not saved")
+        return await newBoard.save()
     }
     catch(error) {
-        await session.abortTransaction()
-        session.endSession()
+        if (user) await user.save()
         throw error
     }
 }
@@ -40,6 +37,25 @@ BoardController.update = (board, data) => {
     const query = {'id': board.id};
     const options = {new: true, upsert: true};
     return Board.findOneAndUpdate(query, data, options);
+}
+
+BoardController.addMembers = async(boardId, membersIds) => {
+    const board = await Board.findById(boardId)
+    const addMember = async(memberId) => {
+        try {
+            const user = await UserController.addBoard(memberId, boardId)
+            board.members.push(user.id)
+            board.save()
+        }
+        catch(error) {
+
+        }
+    }
+    let array = []
+    for (let memberId of membersIds) {
+        array.push(addMember(memberId))
+    }
+
 }
 
 BoardController.addList = async(boardId, listId) => {

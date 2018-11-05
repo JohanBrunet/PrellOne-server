@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const authMiddleware = require('../middlewares/authMiddleware');
 const mongoose = require('mongoose')
+const throwError = require('../utils/throwError')
 
 let UserController = () => {}
 
@@ -42,14 +43,17 @@ UserController.update = (userId, data) => {
     return User.findByIdAndUpdate(userId, data, options);
 }
 
-UserController.addBoard = (userId, boardId, session) => {
-    const update = { 
-        $push: {
-            boards: boardId
-        } 
+UserController.addBoard = async(userId, boardId) => {
+    const user = await User.findById(userId)
+    try {
+        await User.updateOne({ id: userID }, {
+            $push: { boards: boardId}
+        })
+        return user
     }
-    const options = {session, new: true, upsert: true};
-    return User.findByIdAndUpdate(userId, update, options);
+    catch(error) {
+        throwError(500, "Update failed")
+    }
 }
 
 module.exports = UserController;
