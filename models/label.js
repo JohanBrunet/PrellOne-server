@@ -9,7 +9,7 @@ const LabelSchema = new Schema({
     },
     color: {
         type: String,
-        enum: ["yellow", "purple", "blue", "red", "green", "orange", "black", "deepskyblue", "pink", "lime"],
+        enum: ["primary", "success", "danger", "warning"],
         required: true
     }
 }, 

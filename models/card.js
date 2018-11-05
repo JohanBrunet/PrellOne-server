@@ -44,7 +44,7 @@ const CardSchema = new Schema({
         url: String
     }, { timestamps: true }],
     comments: [{
-        text: String,
+        content: String,
         writer: {
             type: Schema.Types.ObjectId,
             ref: 'User'

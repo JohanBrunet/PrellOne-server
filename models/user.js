@@ -18,7 +18,8 @@ const UserSchema = new Schema({
         type: String
     },
     profilePicture: {
-        type: String
+        type: String,
+        default: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
     },
     email: {
         type: String,

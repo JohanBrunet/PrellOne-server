@@ -7,8 +7,7 @@ const TeamSchema = new Schema({
         required: true
     },
     displayName: {
-        type: String,
-        required: true
+        type: String
     },
     description: String,
     boards: [{ 
