@@ -47,7 +47,7 @@ const UserSchema = new Schema({
 { timestamps: true })
 
 UserSchema.pre('save', async function(next) {
-    const user = await mongoose.model('user').findOne({email: this.email});
+    const user = await mongoose.model('user', UserSchema).findOne({email: this.email});
     if(user) throwError(400, "This email already exists!")
     next()
 })
