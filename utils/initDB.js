@@ -61,6 +61,15 @@ seedCollections = async() => {
         password: user2pwd,
         profilePicture: 'https://bit.ly/2yHma2e'
     }
+    user3pwd = await authMiddleware.hashPassword("user")
+    user3 = {
+        firstName: 'User',
+        lastName: 'USER',
+        username: 'username',
+        email: "user@prellone.com",
+        password: user3pwd,
+        profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
+    }
 
     const [u1, u2] = await models.user.insertMany([user1, user2])
     console.log("Users created")
