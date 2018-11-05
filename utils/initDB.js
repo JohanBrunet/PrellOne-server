@@ -24,14 +24,13 @@ module.exports.initDB = async () => {
                 }
             }
         }
-        if (process.env.NODE_ENV != 'production' && models != []) {
+        if (process.env.NODE_ENV != 'production' && Object.keys(models).length) {
             try {
                 await seedCollections(models)
                 console.log(`The database has been seeded`)
             }
             catch(error) {
                 console.error("Seeding database failed")
-                console.error(error)
             }
         }
     })
