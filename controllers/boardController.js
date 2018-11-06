@@ -1,19 +1,17 @@
 const Board = require('../models/board')
 const userController = require('./userController')
-const mongoose = require('mongoose')
-const throwError = require('../utils/throwError')
 
 let BoardController = () => {}
 
-BoardController.getByID = (id) => {
-    return Board.findById(id).populate({ path: 'lists', populate: { path: 'cards' }})
+BoardController.getById = async(id) => {
+    return await Board.findById(id).populate({ path: 'lists', populate: { path: 'cards' }})
                              .populate('members')
                              .populate('labels')
                              .populate('teams')
 }
 
-BoardController.getAll = () => {
-    return Board.find();
+BoardController.getAll = async() => {
+    return await Board.find();
 }
 
 BoardController.create = async(boardData, ownerId, teamId = null) => {
