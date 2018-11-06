@@ -34,6 +34,17 @@ const BoardSchema = new Schema({
 }, 
 { timestamps: true });
 
+BoardSchema.options.toJSON = {
+    transform: function(doc, ret, options) {
+        ret.id = ret._id
+        delete ret._id
+        delete ret.createdAt
+        delete ret.updatedAt
+        delete ret.__v
+        return ret
+    }
+}
+
 let Board
 try {
     Board = mongoose.model('Board', BoardSchema)
