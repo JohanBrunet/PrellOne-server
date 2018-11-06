@@ -5,13 +5,14 @@ const throwError = require('../utils/throwError')
 
 let ListController = () => {}
 
-ListController.getByID = (id) => {
-    return List.findById(id).populate('cards')
-                            .populate('labels')
+ListController.getById = async(id) => {
+    return await List.findById(id).populate('cards')
+                                  .populate('labels')
+                                  .populate('users')
 }
 
-ListController.getAll = (boardId) => {
-    return List.find({board: boardId}).populate('cards')
+ListController.getAll = async(boardId) => {
+    return await List.find({board: boardId}).populate('cards')
                                       .populate('labels')
 }
 

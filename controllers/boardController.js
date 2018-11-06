@@ -7,7 +7,6 @@ let BoardController = () => {}
 BoardController.getById = async(id) => {
     return await Board.findById(id).populate({ path: 'lists', populate: { path: 'cards' }})
                              .populate('members')
-                             .populate('labels')
                              .populate('teams')
 }
 

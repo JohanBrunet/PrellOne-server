@@ -5,9 +5,9 @@ const auth = require('../middlewares/authMiddleware').isAuthenticated;
 const asyncWrapper = require('../middlewares/asyncWrapper')
 const ListController = require('../controllers/listController');
 
-/* GET ALL LISTS */
-router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
-    const lists = await ListController.getAll(req.params.id);
+/* GET ALL LISTS FOR A BOARD*/
+router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+    const lists = await ListController.getAll();
     res.type('application/json');
     res.status(200);
     res.json(lists);
@@ -16,7 +16,6 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
 /* GET SINGLE LIST BY ID */
 router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
     const list = await ListController.getById(req.params.id);
-
     res.type('application/json');
     res.status(200);
     res.json(list);

@@ -5,7 +5,7 @@ let CardController = () => {}
 
 CardController.getById = async(id) => {
     return await Card.findById(id).populate('members')
-                                    .populate('labels')
+                                
 }
 
 CardController.getAll = async() => {

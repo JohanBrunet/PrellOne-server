@@ -5,6 +5,7 @@ const auth = require('../middlewares/authMiddleware').isAuthenticated
 const decodeToken = require('../middlewares/authMiddleware').decodeToken
 const asyncWrapper = require('../middlewares/asyncWrapper')
 const BoardController = require('../controllers/boardController')
+const ListController=require('../controllers/listController')
 
 /* GET ALL BOARDS */
 router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
@@ -21,6 +22,15 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.status(200)
     res.json(board)
 }))
+
+/* GET LIST FROM A BOARD  */
+router.get('/:id/lists', /* auth, */ asyncWrapper( async(req, res, next) => {
+    const board = await ListController.getAll(req.params.id)
+    res.type('application/json')
+    res.status(200)
+    res.json(board)
+}))
+
 
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newBoard = req.body.newBoard
