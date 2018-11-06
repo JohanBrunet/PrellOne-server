@@ -6,9 +6,8 @@ const asyncWrapper = require('../middlewares/asyncWrapper')
 const ListController = require('../controllers/listController');
 
 /* GET ALL LISTS */
-router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
-    const lists = await ListController.getAll();
-
+router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
+    const lists = await ListController.getAll(req.params.id);
     res.type('application/json');
     res.status(200);
     res.json(lists);

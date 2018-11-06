@@ -7,10 +7,12 @@ let ListController = () => {}
 
 ListController.getByID = (id) => {
     return List.findById(id).populate('cards')
+                            .populate('labels')
 }
 
 ListController.getAll = (boardId) => {
-    return List.find({board: boardId})
+    return List.find({board: boardId}).populate('cards')
+                                      .populate('labels')
 }
 
 ListController.create = async(listData) => {
