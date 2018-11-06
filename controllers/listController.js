@@ -15,14 +15,14 @@ ListController.getAll = (boardId) => {
                                       .populate('labels')
 }
 
-ListController.create = async(listData) => {
+ListController.create = async(listData,boardId) => {
     try {
         const newList = new List(listData)
-        await BoardController.addList(listData.board, newList.id)
+        await BoardController.addList(boardId, newList.id)
         return newList.save()
     }
     catch(error) {
-        throwError(500, "Cannot create list")
+        throwError(500, error)
     }
 }
 

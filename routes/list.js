@@ -24,7 +24,8 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
 
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newList = req.body;
-    const list = await ListController.create(newList);
+    const boardId = req.body.board;
+    const list = await ListController.create(newList,boardId);
     res.type('application/json');
     res.status(200);
     res.json(list);

@@ -58,7 +58,7 @@ BoardController.addMembers = async(boardId, membersIds) => {
 }
 
 BoardController.addList = async(boardId, listId) => {
-    const query = {'id': boardId}
+    const query = {_id: boardId}
     const update = {
         $push: {
             lists: listId
