@@ -2,6 +2,7 @@
 
 const router = require('express').Router()
 const auth = require('../middlewares/authMiddleware').isAuthenticated
+const decodeToken = require('../middlewares/authMiddleware').decodeToken
 const asyncWrapper = require('../middlewares/asyncWrapper')
 const BoardController = require('../controllers/boardController')
 
@@ -23,7 +24,8 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
 
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newBoard = req.body
-    const board = await BoardController.create(newBoard)
+    const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const board = await BoardController.create(newBoard, owner.id)
     res.type('application/json')
     res.status(200)
     res.json(board)
