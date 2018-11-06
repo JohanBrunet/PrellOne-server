@@ -53,6 +53,24 @@ const CardSchema = new Schema({
 }, 
 { timestamps: true });
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    const rand = Math.floor(Math.random() * (max - min)) + min
+    return rand
+}
+
+CardSchema.pre('save', async function(next) {
+    if(!this.position) {
+        const lastCardInList = await mongoose.model('Card', CardSchema).findOne({list: this.list}).sort({'position': -1})
+        const lastPosition = lastCardInList ? lastCardInList.position : 0
+        let min = lastPosition
+        let max = 10000
+        this.position = getRandomInt(min, min + max)
+    }
+    next()
+})
+
 let Card
 try {
     Card = mongoose.model('Card', CardSchema)

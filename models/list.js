@@ -22,28 +22,23 @@ const ListSchema = new Schema({
 }, 
 { timestamps: true });
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    const rand = Math.floor(Math.random() * (max - min)) + min
+    return rand
+}
+
 ListSchema.pre('save', async function(next) {
     if(!this.position) {
-        const lastPosition = await mongoose.model('List', ListSchema).findOne({board: this.board}).sort({"-position": -1})
-        let min = 0
+        const lastListInBoard = await mongoose.model('List', ListSchema).findOne({board: this.board}).sort({'position': -1})
+        const lastPosition = lastListInBoard ? lastListInBoard.position : 0
+        let min = lastPosition
         let max = 10000
-        if(!lastPosition) {
-            this.postion = getRandomInt(min, max)
-        }
-        else {
-            min = lastPosition
-            max = max + min
-            this.position = getRandomInt(min, max)
-        }
+        this.position = getRandomInt(min, min + max)
     }
     next()
 })
-
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-}
 
 let List
 try {

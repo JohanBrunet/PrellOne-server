@@ -72,9 +72,9 @@ seedCollections = async() => {
         profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
     }
 
-    // TODO: create documents
     const u1 = await models.user.create(user1)
     const u2 = await models.user.create(user2)
+    const u3 = await models.user.create(user3)
     console.log("Users created")
 
     /**
