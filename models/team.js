@@ -25,6 +25,17 @@ const TeamSchema = new Schema({
 }, 
 { timestamps: true });
 
+TeamSchema.options.toJSON = {
+    transform: function(doc, ret, options) {
+        ret.id = ret._id
+        delete ret._id
+        delete ret.createdAt
+        delete ret.updatedAt
+        delete ret.__v
+        return ret
+    }
+}
+
 let Team
 try {
     Team = mongoose.model('Team', TeamSchema)
