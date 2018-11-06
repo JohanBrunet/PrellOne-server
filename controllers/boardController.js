@@ -1,5 +1,6 @@
 const Board = require('../models/board')
 const userController = require('./userController')
+const teamController=require('./teamController')
 
 let BoardController = () => {}
 
@@ -14,18 +15,19 @@ BoardController.getAll = async() => {
     return await Board.find();
 }
 
-BoardController.create = async(boardData, ownerId, teamId = null) => {
+BoardController.create = async(boardData,/* ownerId,*/ teamId = null) => {
     // TODO: create labels for the board
     const newBoard = new Board(boardData)
-    newBoard.owner = ownerId
+    //newBoard.owner = ownerId
     const user = null
     try {
-        user = userController.addBoard(ownerId, newBoard.id)
-        if(teamId) TeamController.addBoard(teamId, newBoard.id)
+        console.log(teamId)
+        //user = userController.addBoard(ownerId, newBoard.id)
+        if(teamId) teamController.addBoard(teamId, newBoard.id)
         return await newBoard.save()
     }
     catch(error) {
-        if (user) await user.save()
+        //if (user) await user.save()
         throw error
     }
 }
