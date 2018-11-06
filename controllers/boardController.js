@@ -1,5 +1,5 @@
-const Board = require('../models/board');
-const UserController = require('./userController')
+const Board = require('../models/board')
+const userController = require('./userController')
 const mongoose = require('mongoose')
 const throwError = require('../utils/throwError')
 
@@ -9,7 +9,7 @@ BoardController.getByID = (id) => {
     return Board.findById(id).populate({ path: 'lists', populate: { path: 'cards' }})
                              .populate('members')
                              .populate('labels')
-                             .populate('Team')
+                             .populate('teams')
 }
 
 BoardController.getAll = () => {
@@ -17,14 +17,13 @@ BoardController.getAll = () => {
 }
 
 BoardController.create = async(boardData, ownerId, teamId = null) => {
+    // TODO: create labels for the board
     const newBoard = new Board(boardData)
     newBoard.owner = ownerId
     const user = null
     try {
-        user = UserController.addBoard(ownerId, newBoard.id)
+        user = userController.addBoard(ownerId, newBoard.id)
         if(teamId) TeamController.addBoard(teamId, newBoard.id)
-
-        throwError(500, "board not saved")
         return await newBoard.save()
     }
     catch(error) {
@@ -34,28 +33,28 @@ BoardController.create = async(boardData, ownerId, teamId = null) => {
 }
 
 BoardController.update = (board, data) => {
-    const query = {'id': board.id};
-    const options = {new: true, upsert: true};
-    return Board.findOneAndUpdate(query, data, options);
+    const query = {'id': board.id}
+    const options = {new: true, upsert: true}
+    return Board.findOneAndUpdate(query, data, options)
 }
 
 BoardController.addMembers = async(boardId, membersIds) => {
     const board = await Board.findById(boardId)
     const addMember = async(memberId) => {
         try {
-            const user = await UserController.addBoard(memberId, boardId)
+            const user = await userController.addBoard(memberId, boardId)
             board.members.push(user.id)
             board.save()
         }
         catch(error) {
-
+            return Error("Error adding board to user")
         }
     }
     let array = []
     for (let memberId of membersIds) {
         array.push(addMember(memberId))
     }
-
+    // TODO: finish implementation
 }
 
 BoardController.addList = async(boardId, listId) => {
@@ -65,16 +64,8 @@ BoardController.addList = async(boardId, listId) => {
             lists: listId
         } 
     }
-    console.log(update)
     const options = {new: true, upsert: true}
-    try {
-        const board = await Board.findOneAndUpdate(query, update, options)
-        console.log(board)
-        return board
-    }
-    catch(error) {
-        throw error
-    }
+    return await Board.findOneAndUpdate(query, update, options)
 }
 
 module.exports = BoardController;

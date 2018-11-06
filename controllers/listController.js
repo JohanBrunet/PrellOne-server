@@ -9,29 +9,18 @@ ListController.getByID = (id) => {
     return List.findById(id).populate('cards')
 }
 
-ListController.getAll = () => {
-    return Board.find();
+ListController.getAll = (boardId) => {
+    return List.find({board: boardId})
 }
 
 ListController.create = async(listData) => {
-    const session = await mongoose.startSession()
-    session.startTransaction()
     try {
-        const newList = await List.create([listData], { session: session })
-        console.log(newList)
-        if(userId) BoardController.addList(listData.board, newList.id, session)
-        if(teamId) TeamController.addBoard(teamId, newBoard.id)
-
-        // throwError(500, 'Internal server error')
-
-        session.commitTransaction()
-        session.endSession()
-        return newList
+        const newList = new List(listData)
+        await BoardController.addList(listData.board, newList.id)
+        return newList.save()
     }
     catch(error) {
-        session.abortTransaction()
-        session.endSession()
-        throw error
+        throwError(500, "Cannot create list")
     }
 }
 
