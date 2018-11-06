@@ -36,14 +36,14 @@ module.exports.doAuthentication = async(email, password) => {
  */
 module.exports.isAuthenticated = (req, res, next) => {
     try {
-        return next(decodeToken(req.cookies.prellone.appAuthToken))
+        return next(this.decodeToken(req.cookies.prellone.appAuthToken))
     }
     catch(error) {
         throw error
     }
 }
 
-authorize = async(user, token) => {
+authorize = (user, token) => {
     let result = user.toJSON()
     delete result.password
     result.appAuthToken = token;
@@ -55,7 +55,12 @@ encodeToken = (userId) => {
 }
 
 module.exports.decodeToken = (token) => {
-    return jwt.verify(token, randomSecretKey)
+    try {
+        return jwt.verify(token, randomSecretKey)
+    }
+    catch(error) {
+        throwError(400, "Invalid token")
+    }
 }
 
 module.exports.hashPassword = async(plainPassword) => {
