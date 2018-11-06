@@ -21,7 +21,7 @@ module.exports.doAuthentication = async(email, password) => {
 
     // if the user is found but the password is wrong
     if (await passwordMatch(password, user.password)) {
-        const token = createToken(user.id);
+        const token = encodeToken(user.id);
         return authorize(user, token);
     }
     else  {
@@ -36,7 +36,7 @@ module.exports.doAuthentication = async(email, password) => {
  */
 module.exports.isAuthenticated = (req, res, next) => {
     try {
-        return next(jwt.verify(req.cookies.prellone.appAuthToken, randomSecretKey))
+        return next(decodeToken(req.cookies.prellone.appAuthToken))
     }
     catch(error) {
         throw error
@@ -50,8 +50,12 @@ authorize = async(user, token) => {
     return result;
 }
 
-createToken = (userId) => {
+encodeToken = (userId) => {
     return jwt.sign({'id': userId}, randomSecretKey);
+}
+
+module.exports.decodeToken = (token) => {
+    return jwt.verify(token, randomSecretKey)
 }
 
 module.exports.hashPassword = async(plainPassword) => {
