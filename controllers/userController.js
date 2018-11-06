@@ -26,7 +26,7 @@ UserController.getAll = () => {
 }
 
 UserController.getWithBoards = (id) => {
-    return User.findById(id).populate('boards')
+    return User.findById(id).populate('boards', 'title')
 }
 
 UserController.create = async(data) => {
