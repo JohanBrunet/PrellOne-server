@@ -7,17 +7,23 @@ const User = require('../controllers/userController');
 
 /* GET ALL USERS */
 router.get('/', auth, asyncWrapper( async(req, res, next) => {
-    const users = await User.getAll();
-
-    res.type('application/json');
-    res.status(200);
-    res.json(users);
-}));
+    const users = await User.getAll()
+    res.type('application/json')
+    res.status(200)
+    res.json(users)
+}))
 
 /* GET SINGLE USER BY ID */
 router.get('/:id', auth, asyncWrapper( async(req, res, next) => {
-    const user = await User.getById(req.params.id);
+    const user = await User.getById(req.params.id)
+    res.type('application/json')
+    res.status(200)
+    res.json(user)
+}))
 
+/* GET SINGLE USER BY ID */
+router.get('/:id/boards', /*auth,*/ asyncWrapper( async(req, res, next) => {
+    const user = await User.getWithBoards(req.params.id);
     res.type('application/json');
     res.status(200);
     res.json(user);
