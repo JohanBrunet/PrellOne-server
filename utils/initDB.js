@@ -94,8 +94,8 @@ seedCollections = async() => {
     const b1 = await models.board.create(board1)
     const b2 = await models.board.create(board2)
     console.log("Boards created")
-    await models.user.findOneAndUpdate({id: u1._id}, { $push: {boards: {$each: [b1._id, b2._id]} } })
-    await models.user.findOneAndUpdate({id: u2._id}, { $push: {boards: {$each: [b1._id, b2._id]} } })
+    await models.user.findOneAndUpdate({_id: u1._id}, { $push: {boards: {$each: [b1._id, b2._id]} } })
+    await models.user.findOneAndUpdate({_id: u2._id}, { $push: {boards: {$each: [b1._id, b2._id]} } })
 
     /**
      * Create lists
@@ -117,8 +117,8 @@ seedCollections = async() => {
     const li2 = await models.list.create(list2)
     const li3 = await models.list.create(list3)
     console.log("Lists created")
-    await models.board.findOneAndUpdate({id: b1._id}, { $push: {lists: {$each: [li1._id, li2._id]} } })
-    await models.board.findOneAndUpdate({id: b2._id}, { $push: {lists: li3._id } })
+    await models.board.findOneAndUpdate({_id: b1._id}, { $push: {lists: {$each: [li1._id, li2._id]} } })
+    await models.board.findOneAndUpdate({_id: b2._id}, { $push: {lists: li3._id } })
 
     /**
      * Create labels board 1
@@ -174,8 +174,8 @@ seedCollections = async() => {
     const l4b2 = await models.label.create(label4board2)
     console.log("Labels board2 created")
 
-    await models.board.findOneAndUpdate({id: b1._id}, { $push: {labels: {$each: [l1b1._id, l2b1._id, l3b1._id, l4b1._id]} } })
-    await models.board.findOneAndUpdate({id: b2._id}, { $push: {labels: {$each: [l1b2._id, l2b2._id, l3b2._id, l4b2._id]} } })
+    await models.board.findOneAndUpdate({_id: b1._id}, { $push: {labels: {$each: [l1b1._id, l2b1._id, l3b1._id, l4b1._id]} } })
+    await models.board.findOneAndUpdate({_id: b2._id}, { $push: {labels: {$each: [l1b2._id, l2b2._id, l3b2._id, l4b2._id]} } })
 
     /**
      * Create cards
@@ -249,9 +249,9 @@ seedCollections = async() => {
     const c7 = await models.card.create(card7)
     console.log("Cards created")
 
-    await models.list.findOneAndUpdate({id: li1._id}, { $push: {cards: {$each: [c1._id, c2._id]} } })
-    await models.list.findOneAndUpdate({id: li2._id}, { $push: {cards: {$each: [c3._id, c4._id]} } })
-    await models.list.findOneAndUpdate({id: li3._id}, { $push: {cards: {$each: [c5._id, c6._id, c7._id]} } })
+    await models.list.findOneAndUpdate({_id: li1._id}, { $push: {cards: {$each: [c1._id, c2._id]} } })
+    await models.list.findOneAndUpdate({_id: li2._id}, { $push: {cards: {$each: [c3._id, c4._id]} } })
+    await models.list.findOneAndUpdate({_id: li3._id}, { $push: {cards: {$each: [c5._id, c6._id, c7._id]} } })
 
     /**
      * Create teams
@@ -273,10 +273,10 @@ seedCollections = async() => {
     const t2 = await models.team.create(team2)
     console.log("Teams created")
 
-    await models.user.findOneAndUpdate({id: u1._id}, { $push: {teams: t1._id } })
-    await models.user.findOneAndUpdate({id: u2._id}, { $push: {teams: t2._id } })
+    await models.user.findOneAndUpdate({_id: u1._id}, { $push: {teams: t1._id } })
+    await models.user.findOneAndUpdate({_id: u2._id}, { $push: {teams: t2._id } })
 
-    await models.board.findOneAndUpdate({id: b1._id}, { $push: {teams: {$each: [t1._id, t2._id]} } })
-    await models.board.findOneAndUpdate({id: b2._id}, { $push: {teams: t2._id } })
+    await models.board.findOneAndUpdate({_id: b1._id}, { $push: {teams: {$each: [t1._id, t2._id]} } })
+    await models.board.findOneAndUpdate({_id: b2._id}, { $push: {teams: t2._id } })
 
 }
