@@ -13,14 +13,13 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-module.exports.uploadFile = async(fileName) => {
+module.exports.uploadFile = async(fileName, fileContent) => {
     try {
-        const fileContent = await readFile(fileName)
         const key = `${fileName}-${uuid.v4()}`
         const params = {
             Bucket: bucketName, // pass your bucket name
             Key: key, // file will be saved as <bucketName>/<fileName>
-            Body: JSON.stringify(fileContent, null, 4)
+            Body: fileContent
         };
         const uploaded = await s3.upload(params).promise()
         console.log(`File uploaded successfully at ${uploaded.Key}`)
@@ -36,12 +35,11 @@ module.exports.uploadProfilePicture = async(fileName, fileContent, directory = n
         const bucket = directory ? `${bucketName}/${directory}` : bucketName
         const [name, extension] = fileName.split(".")
         const key = `${name}-${uuid.v4()}.${extension}`
-        console.log(key)
         const params = {
             Bucket: bucket, // pass your bucket name
             Key: key, // file will be saved as <bucketName>/<fileName>
             ACL: "public-read", // for the picture to be accessible via URL
-            Body: JSON.stringify(fileContent, null, 4)
+            Body: fileContent
         };
         const uploaded = await s3.upload(params).promise()
         console.log(`File uploaded successfully at ${uploaded.Location}`)

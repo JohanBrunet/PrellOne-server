@@ -33,7 +33,6 @@ const appConfig = require('./config/api')
 const databaseUrl = process.env.DB_USER != null && process.env.DB_USER != ""
                     ? `mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
                     : `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
-console.log(databaseUrl)
 mongoose.connect(databaseUrl, { useNewUrlParser: true })
 .then(() => {
     console.log('Connection to database succesful')
@@ -45,12 +44,6 @@ const initDB = require('./utils/initDB').initDB
 mongoose.connection.once('open', async() => {
     await initDB()
 })
-
-// const aws = require('./utils/aws')
-// const fs = require('fs')
-// fs.readFile('/Users/johan/Downloads/lapin.jpeg', (err, data) => {
-//     if(!err) aws.uploadProfilePicture('lapin.jpeg', data, 'johan')
-// })
 
 // Logging middleware
 if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'local'){
