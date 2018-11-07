@@ -16,7 +16,7 @@ module.exports.doAuthentication = async(email, password) => {
 
     let user = await userController.getByEmailWithPassword(email);
     if (!user || user.length == 0) {
-        throwError(404, 'User does not exist')
+        throwError(404, 'Wrong email or password')
     }
 
     // if the user is found but the password is wrong
@@ -26,7 +26,7 @@ module.exports.doAuthentication = async(email, password) => {
     }
     else  {
         user = false;
-        throwError(401, 'Unauthorized')
+        throwError(401, 'Wrong email or password')
     };
 
 }
@@ -46,8 +46,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 authorize = (user, token) => {
     let result = user.toJSON()
     delete result.password
-    result.appAuthToken = token;
-    return result;
+    return {user: result, token: token};
 }
 
 encodeToken = (userId) => {
