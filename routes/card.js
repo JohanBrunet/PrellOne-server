@@ -38,6 +38,16 @@ router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
+router.put('/updateDesc',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const desc=req.body.desc
+    const idCard=req.body.idCard
+    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const card = await cardController.updateDesc(desc,idCard/*,owner.id*/)
+    res.type('application/json')
+    res.status(200)
+    res.json(card)
+}))
+
 router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
     const idUser=req.body.idUser
     const idCard=req.body.idCard

@@ -30,6 +30,17 @@ CardController.create = async(cardData,listId) => {
     }
 }
 
+CardController.updateDesc=(desc,cardId)=>{
+    const query = {_id: cardId}
+    const update = {
+        $set: {
+            description: desc
+        } 
+    }
+    const options = {new: true, upsert: true}
+    return Card.findByIdAndUpdate(query, update, options)
+}
+
 CardController.addMember=(userId,cardId)=>{
     const query = {_id: cardId}
     const update = {
