@@ -6,6 +6,8 @@ const decodeToken = require('../middlewares/authMiddleware').decodeToken
 const asyncWrapper = require('../middlewares/asyncWrapper')
 const BoardController = require('../controllers/boardController')
 const ListController=require('../controllers/listController')
+const LabelController=require('../controllers/labelController')
+
 
 /* GET ALL BOARDS */
 router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
@@ -23,12 +25,20 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(board)
 }))
 
-/* GET LIST FROM A BOARD  */
-router.get('/:id/lists', /* auth, */ asyncWrapper( async(req, res, next) => {
-    const board = await ListController.getAll(req.params.id)
+/* GET LABEL FROM A BOARD */
+router.get('/:id/labels', /* auth, */ asyncWrapper( async(req, res, next) => {
+    const labels= await LabelController.getAll(req.params.id)
     res.type('application/json')
     res.status(200)
-    res.json(board)
+    res.json(labels)
+}))
+
+/* GET LISTS FROM A BOARD  */
+router.get('/:id/lists', /* auth, */ asyncWrapper( async(req, res, next) => {
+    const lists = await ListController.getAll(req.params.id)
+    res.type('application/json')
+    res.status(200)
+    res.json(lists)
 }))
 
 

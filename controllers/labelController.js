@@ -4,12 +4,16 @@ const throwError = require('../utils/throwError')
 
 let LabelController = () => {}
 
-LabelController.getByID = async(id) => {
+LabelController.getById = (id) => {
     return Label.findById(id)
 }
 
-LabelController.getAll = async(boardId) => {
+LabelController.getAll = (boardId) => {
     return Label.find({board: boardId})
+}
+
+LabelController.getAll = () => {
+    return Label.find()
 }
 
 LabelController.create = async(boardId, color, title = null) => {
