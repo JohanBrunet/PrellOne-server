@@ -28,11 +28,10 @@ LabelController.create = async(labelData,boardId) => {
     }
 }
 
-LabelController.updateTitle = (labelId, title) => {
-    const query = {'id': labelId};
-    const update = {$set: {'title': title}}
-    const options = {new: true, upsert: true};
-    return Board.findOneAndUpdate(query, update, options);
+LabelController.update = (newLabel) => {
+    const query = {'_id': newLabel.id}
+    const options = {new: true, upsert: true}
+    return Label.findOneAndUpdate(query, newLabel, options)
 }
 
 module.exports = LabelController;
