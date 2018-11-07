@@ -22,4 +22,16 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(label)
 }))
 
+/*CREATE LABEL*/
+router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+    const newLabel = req.body
+    const boardId=req.body.boardId
+    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const board = await LabelController.create(newLabel /*,owner.id*/,boardId)
+    res.type('application/json')
+    res.status(200)
+    res.json(board)
+}))
+
+
 module.exports = router;

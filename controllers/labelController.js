@@ -1,6 +1,7 @@
 const Label = require('../models/label')
 const mongoose = require('mongoose')
 const throwError = require('../utils/throwError')
+const BoardController=require('../controllers/boardController')
 
 let LabelController = () => {}
 
@@ -16,17 +17,14 @@ LabelController.getAll = () => {
     return Label.find()
 }
 
-LabelController.create = async(boardId, color, title = null) => {
-    const newLabel = new Label({
-        board: boardId,
-        color: color
-    })
-    if (title) newLabel.title = title
+LabelController.create = async(labelData,boardId) => {
     try {
-        return await newLabel.save()
+        const newLabel = new Label(labelData)
+        await BoardController.addLabel(boardId,newLabel.id)
+        return newLabel.save()
     }
     catch(error) {
-        throw error
+        throwError(500, error)
     }
 }
 

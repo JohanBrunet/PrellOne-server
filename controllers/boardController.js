@@ -66,5 +66,16 @@ BoardController.addList = async(boardId, listId) => {
     const options = {new: true, upsert: true}
     return await Board.findOneAndUpdate(query, update, options)
 }
+BoardController.addLabel = async(boardId, labelId) => {
+    const query = {_id: boardId}
+    const update = {
+        $push: {
+            labels: labelId
+        } 
+    }
+    const options = {new: true, upsert: true}
+    return await Board.findOneAndUpdate(query, update, options)
+}
+
 
 module.exports = BoardController;
