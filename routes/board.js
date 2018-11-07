@@ -33,7 +33,7 @@ router.get('/:id/lists', /* auth, */ asyncWrapper( async(req, res, next) => {
 
 
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
-    const newBoard = req.body.newBoard
+    const newBoard = req.body
     const teamId=req.body.teamId
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
     const board = await BoardController.create(newBoard /*,owner.id*/,teamId)

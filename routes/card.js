@@ -20,10 +20,19 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.status(200)
     res.json(card)
 }))
-
+/* CREATE A NEW CARD */
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newCard = req.body
-    const card = await cardController.create(newCard)
+    const listId=req.body.list
+    const card = await cardController.create(newCard,listId)
+    res.type('application/json')
+    res.status(200)
+    res.json(card)
+}))
+
+router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const updatedCard=req.body
+    const card = await cardController.update(updatedCard)
     res.type('application/json')
     res.status(200)
     res.json(card)

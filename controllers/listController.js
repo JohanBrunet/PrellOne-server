@@ -34,6 +34,7 @@ ListController.update = (list, data) => {
 }
 
 ListController.addCard = (listId, cardId) => {
+    console.log("lala")
     const update = {
         $push: {
             cards: cardId
