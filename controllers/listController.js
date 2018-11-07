@@ -16,6 +16,11 @@ ListController.getAll = async(boardId) => {
                                       .populate('labels')
 }
 
+ListController.getAll = async() => {
+    return await List.find().populate('cards')
+                            .populate('labels')
+}
+
 ListController.create = async(listData,boardId) => {
     try {
         const newList = new List(listData)

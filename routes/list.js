@@ -5,7 +5,7 @@ const auth = require('../middlewares/authMiddleware').isAuthenticated;
 const asyncWrapper = require('../middlewares/asyncWrapper')
 const ListController = require('../controllers/listController');
 
-/* GET ALL LISTS FOR A BOARD*/
+/* GET ALL LISTS*/
 router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const lists = await ListController.getAll();
     res.type('application/json');
