@@ -21,13 +21,23 @@ router.get('/:id', auth, asyncWrapper( async(req, res, next) => {
     res.json(user)
 }))
 
-/* GET SINGLE USER BY ID */
+/* GET USER BOARDS WITH ID */
 router.get('/:id/boards', /*auth,*/ asyncWrapper( async(req, res, next) => {
     const user = await User.getWithBoards(req.params.id);
     res.type('application/json');
     res.status(200);
     res.json(user);
-}));
+}))
+
+/* GET USER BOARDS WITH USERNAME */
+router.get('/:username/boards', /*auth,*/ asyncWrapper( async(req, res, next) => {
+    const token = req.headers['Authorization']
+        console.log('token : ', token)
+    const user = await User.getWithBoards(req.params.username);
+    res.type('application/json');
+    res.status(200);
+    res.json(user);
+}))
 
 // TODO: update user and delete user
 
