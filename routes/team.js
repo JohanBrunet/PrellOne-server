@@ -41,4 +41,13 @@ router.put('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(team)
 }))
 
+router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const idUser=req.body.idUser
+    const idTeam=req.body.idTeam
+    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const team = await TeamController.addMember(idUser,idTeam/*,owner.id*/)
+    res.type('application/json')
+    res.status(200)
+    res.json(team)
+}))
 module.exports = router;

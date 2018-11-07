@@ -39,4 +39,15 @@ TeamController.create = async(teamData) => {
         throwError(500, error)
     }
 }
+
+TeamController.addMember=(userId,teamId)=>{
+    const query = {_id: teamId}
+    const update = {
+        $push: {
+            members: userId
+        } 
+    }
+    const options = {new: true, upsert: true}
+    return Team.findByIdAndUpdate(query, update, options)
+}
 module.exports = TeamController;

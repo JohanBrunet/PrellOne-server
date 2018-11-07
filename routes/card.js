@@ -23,7 +23,7 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
 /* CREATE A NEW CARD */
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newCard = req.body
-    const listId=req.body.list
+    const listId=req.body.idList
     const card = await cardController.create(newCard,listId)
     res.type('application/json')
     res.status(200)
@@ -33,6 +33,16 @@ router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
 router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
     const updatedCard=req.body
     const card = await cardController.update(updatedCard)
+    res.type('application/json')
+    res.status(200)
+    res.json(card)
+}))
+
+router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const idUser=req.body.idUser
+    const idCard=req.body.idCard
+    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const card = await cardController.addMember(idUser,idCard/*,owner.id*/)
     res.type('application/json')
     res.status(200)
     res.json(card)

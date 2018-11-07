@@ -29,4 +29,15 @@ CardController.create = async(cardData,listId) => {
         throwError(500, error)
     }
 }
+
+CardController.addMember=(userId,cardId)=>{
+    const query = {_id: cardId}
+    const update = {
+        $push: {
+            members: userId
+        } 
+    }
+    const options = {new: true, upsert: true}
+    return Card.findByIdAndUpdate(query, update, options)
+}
 module.exports = CardController;

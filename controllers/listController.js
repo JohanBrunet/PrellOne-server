@@ -39,14 +39,14 @@ ListController.update = (list, data) => {
 }
 
 ListController.addCard = (listId, cardId) => {
-    console.log("lala")
+    const query = {_id: listId}
     const update = {
         $push: {
             cards: cardId
         } 
     }
     const options = {new: true, upsert: true}
-    return List.findByIdAndUpdate(listId, update, options)
+    return List.findByIdAndUpdate(query, update, options)
 }
 
 module.exports = ListController;
