@@ -1,3 +1,4 @@
+const throwError = require('../utils/throwError')
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
