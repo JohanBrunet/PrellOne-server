@@ -41,18 +41,26 @@ router.get('/:username/boards', /*auth,*/ asyncWrapper( async(req, res, next) =>
 
 // TODO: update user and delete user
 
-/* UPDATE USER */
-// router.put('/:id', function (req, res, next) {
-//   if (req.isAuthenticated()) {
-//     req.body.pwd = auth.encrypt(req.body.pwd);
-//     User.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-//       if (err) return next(err);
-//       res.json(post);
-//     });
-//   } else {
-//     res.status(401).send({ msg: 'Unauthorized' });
-//   }
-// });
+/* UPDATE USER PASSWORD */
+router.put('/:id/password', asyncWrapper( async(req, res, next) => {
+    let user = req.params.id
+    let newPwd = req.body.newPwd
+    let oldPwd = req.body.oldPwd
+    const result = await userController.updatePassword(user, oldPwd, newPwd)
+    res.type('application/json');
+    res.status(200);
+    return res.json(result);
+ }));
+
+ /* UPDATE USER DATA */
+router.put('/:id', asyncWrapper( async(req, res, next) => {
+    let user = req.params.id
+    let data = req.body
+    const result = await userController.update(user, data)
+    res.type('application/json');
+    res.status(200);
+    return res.json(result);
+ }));
 
 /* DELETE USER */
 // router.delete('/:id', function (req, res, next) {

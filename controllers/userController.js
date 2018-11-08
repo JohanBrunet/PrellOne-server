@@ -43,6 +43,19 @@ UserController.update = (userId, data) => {
     return User.findByIdAndUpdate(userId, data, options);
 }
 
+
+UserController.updatePassword = async(userId, oldPwd, newPwd) => {
+    const user = await getById(userId)
+    if (await authMiddleware.passwordMatch(oldPwd, user.password)) {
+        const newPwdHash = authMiddleware.hashPassword(newPwd)
+        return await User.updateOne({ id: userId }, {
+            $set: { password: newPwdHash}
+        })
+    }
+    else throwError(400, "Password do not match")
+    
+}
+
 UserController.addBoard = async(userId, boardId) => {
     const user = await User.findById(userId)
     try {
