@@ -29,6 +29,10 @@ UserController.getWithBoards = (username) => {
     return User.findOne({username: username}).populate('boards', 'title')
 }
 
+UserController.getWithTeams=(username)=>{
+    return User.findOne(({username: username})).populate({path: 'teams', populate: 'boards'})
+}
+
 UserController.create = async(data) => {
     let user = data
     if(!user.username) user.username = user.firstName + user.lastName
@@ -42,6 +46,20 @@ UserController.update = (userId, data) => {
     const options = {new: true, upsert: true};
     return User.findByIdAndUpdate(userId, data, options);
 }
+
+
+UserController.updatePassword = async(userId, oldPwd, newPwd) => {
+    const user = await getById(userId)
+    if (await authMiddleware.passwordMatch(oldPwd, user.password)) {
+        const newPwdHash = authMiddleware.hashPassword(newPwd)
+        return await User.updateOne({ id: userId }, {
+            $set: { password: newPwdHash}
+        })
+    }
+    else throwError(400, "Password do not match")
+    
+}
+
 
 UserController.addBoard = async(userId, boardId) => {
     const user = await User.findById(userId)

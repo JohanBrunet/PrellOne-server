@@ -66,6 +66,6 @@ module.exports.hashPassword = async(plainPassword) => {
     return await bcrypt.hash(plainPassword, saltRounds)
 }
 
-passwordMatch = async(plainPassword, passwordHash) => {
+module.exports.passwordMatch = async(plainPassword, passwordHash) => {
     return await bcrypt.compare(plainPassword, passwordHash);;
 }
