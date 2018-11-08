@@ -39,6 +39,16 @@ router.get('/:username/boards', /*auth,*/ asyncWrapper( async(req, res, next) =>
     res.json(user);
 }))
 
+/* GET USER TEAMS WITH USERNAME */
+router.get('/:username/teams', /*auth,*/ asyncWrapper( async(req, res, next) => {
+    const token = req.headers['Authorization']
+
+    const user = await User.getWithTeams(req.params.username);
+    res.type('application/json');
+    res.status(200);
+    res.json(user);
+}))
+
 // TODO: update user and delete user
 
 /* UPDATE USER */

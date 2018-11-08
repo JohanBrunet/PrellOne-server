@@ -29,6 +29,10 @@ UserController.getWithBoards = (username) => {
     return User.findOne({username: username}).populate('boards', 'title')
 }
 
+UserController.getWithTeams=(username)=>{
+    return User.findOne(({username: username})).populate({path: 'teams', populate: 'boards'})
+}
+
 UserController.create = async(data) => {
     let user = data
     if(!user.username) user.username = user.firstName + user.lastName
