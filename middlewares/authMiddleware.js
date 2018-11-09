@@ -20,7 +20,7 @@ module.exports.doAuthentication = async(email, password) => {
     }
 
     // if the user is found but the password is wrong
-    if (await passwordMatch(password, user.password)) {
+    if (await this.passwordMatch(password, user.password)) {
         const token = encodeToken(user.id);
         return authorize(user, token);
     }
@@ -36,7 +36,9 @@ module.exports.doAuthentication = async(email, password) => {
  */
 module.exports.isAuthenticated = (req, res, next) => {
     try {
-        return next(this.decodeToken(req.cookies.prellone.appAuthToken))
+        const header = req.get('Authorization')
+        const [type, token] = header.split(' ')
+        return next(this.decodeToken(token))
     }
     catch(error) {
         throw error
