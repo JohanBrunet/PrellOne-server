@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const UserController = require('./userController')
 const ListController=require('./listController')
+const throwError = require('../utils/throwError')
 
 let CardController = () => {}
 
