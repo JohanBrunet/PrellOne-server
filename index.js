@@ -9,8 +9,12 @@ const express         = require('express'),
       helmet          = require('helmet'),
       uuid            = require('uuid'),
       cors            = require('cors');
+      http = require('http')
+      socketServer =require('socket.io')
 
 const app = express();
+
+
 const env = process.env.NODE_ENV;
 
 process.env.SECRET_KEY = uuid.v4();
@@ -91,6 +95,13 @@ else if(env === 'staging') {
 else if(env === 'production') {
     port = appConfig.api.port;
 }
-
-app.listen(port);
+const server=http.createServer(app);
+server.listen(port);
 console.log("Server listening on port: " + port);
+const io=socketServer(server)
+io.on('connection', (socket) =>{
+	console.log("Connected to Socket!!"+ socket.id)	
+	socket.on('disconnect', ()=>{
+		console.log('Disconnected - '+ socket.id);
+    });
+})
