@@ -59,7 +59,9 @@ encodeToken = (userId) => {
 
 module.exports.decodeToken = (token) => {
     try {
-        return jwt.verify(token, randomSecretKey)
+        console.log(token)
+        const userId = jwt.verify(token, randomSecretKey).id
+        return userId
     }
     catch(error) {
         throwError(400, "Invalid token")
