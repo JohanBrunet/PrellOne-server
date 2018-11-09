@@ -17,7 +17,7 @@ UserController.getByEmailWithPassword = (value) => {
     return User.findOne({email: value}).select("+password");
 }
 
-UserController.getByID = (id) => {
+UserController.getById = (id) => {
     return User.findById(id);
 }
 
@@ -49,12 +49,10 @@ UserController.update = (userId, data) => {
 
 
 UserController.updatePassword = async(userId, oldPwd, newPwd) => {
-    const user = await getById(userId)
+    const user = await User.findById(userId).select('+password')
     if (await authMiddleware.passwordMatch(oldPwd, user.password)) {
-        const newPwdHash = authMiddleware.hashPassword(newPwd)
-        return await User.updateOne({ id: userId }, {
-            $set: { password: newPwdHash}
-        })
+        const newPwdHash = await authMiddleware.hashPassword(newPwd)
+        return await User.findOneAndUpdate({ id: userId }, { $set: { password: newPwdHash} }, { new: true })
     }
     else throwError(400, "Password do not match")
     

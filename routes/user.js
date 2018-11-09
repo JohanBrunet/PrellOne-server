@@ -22,7 +22,7 @@ router.get('/:id', auth, asyncWrapper( async(req, res, next) => {
 }))
 
 /* GET USER BOARDS WITH ID */
-router.get('/:id/boards', /*auth,*/ asyncWrapper( async(req, res, next) => {
+router.get('/:id/boards', auth, asyncWrapper( async(req, res, next) => {
     const user = await User.getWithBoards(req.params.id);
     res.type('application/json');
     res.status(200);
@@ -30,9 +30,7 @@ router.get('/:id/boards', /*auth,*/ asyncWrapper( async(req, res, next) => {
 }))
 
 /* GET USER BOARDS WITH USERNAME */
-router.get('/:username/boards', /*auth,*/ asyncWrapper( async(req, res, next) => {
-    const token = req.headers['Authorization']
-        console.log('token : ', token)
+router.get('/:username/boards', auth, asyncWrapper( async(req, res, next) => {
     const user = await User.getWithBoards(req.params.username);
     res.type('application/json');
     res.status(200);
@@ -40,9 +38,7 @@ router.get('/:username/boards', /*auth,*/ asyncWrapper( async(req, res, next) =>
 }))
 
 /* GET USER TEAMS WITH USERNAME */
-router.get('/:username/teams', /*auth,*/ asyncWrapper( async(req, res, next) => {
-    const token = req.headers['Authorization']
-
+router.get('/:username/teams', auth, asyncWrapper( async(req, res, next) => {
     const user = await User.getWithTeams(req.params.username);
     res.type('application/json');
     res.status(200);
@@ -50,21 +46,21 @@ router.get('/:username/teams', /*auth,*/ asyncWrapper( async(req, res, next) => 
 }))
 
 /* UPDATE USER PASSWORD */
-router.put('/:id/password', asyncWrapper( async(req, res, next) => {
+router.put('/:id/password', auth, asyncWrapper( async(req, res, next) => {
     let user = req.params.id
     let newPwd = req.body.newPwd
     let oldPwd = req.body.oldPwd
-    const result = await userController.updatePassword(user, oldPwd, newPwd)
+    const result = await User.updatePassword(user, oldPwd, newPwd)
     res.type('application/json');
     res.status(200);
     return res.json(result);
  }));
 
  /* UPDATE USER DATA */
-router.put('/:id', asyncWrapper( async(req, res, next) => {
+router.put('/:id', auth, asyncWrapper( async(req, res, next) => {
     let user = req.params.id
     let data = req.body
-    const result = await userController.update(user, data)
+    const result = await User.update(user, data)
     res.type('application/json');
     res.status(200);
     return res.json(result);
