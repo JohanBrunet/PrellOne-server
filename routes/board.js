@@ -46,7 +46,9 @@ router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newBoard = req.body
     const teamId=req.body.teamId
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
-    const board = await BoardController.create(newBoard /*,owner.id*/,teamId)
+    const owner=req.body.owner
+    console.log(owner)
+    const board = await BoardController.create(newBoard ,owner,teamId)
     res.type('application/json')
     res.status(200)
     res.json(board)

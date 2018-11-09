@@ -64,7 +64,7 @@ UserController.updatePassword = async(userId, oldPwd, newPwd) => {
 UserController.addBoard = async(userId, boardId) => {
     const user = await User.findById(userId)
     try {
-        await User.updateOne({ id: userID }, {
+        await User.updateOne({ _id: userId }, {
             $push: { boards: boardId}
         })
         return user
@@ -73,16 +73,5 @@ UserController.addBoard = async(userId, boardId) => {
         throwError(500, "Update failed")
     }
 }
-
-UserController.addBoard = async(userId, boardId) => {
-    const user = await User.findById(userId)
-        try {
-            user.boards.push(boardId)
-            team.save()
-        }
-        catch(error) {
-            return Error("Error adding board to team")
-        }
-    }
 
 module.exports = UserController;

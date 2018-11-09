@@ -8,21 +8,20 @@ BoardController.getById = async(id) => {
     return await Board.findById(id).populate({ path: 'lists', populate: { path: 'cards' }})
                              .populate('members')
                              .populate('teams')
-                             .populate('labels')
 }
 
 BoardController.getAll = async() => {
     return await Board.find();
 }
 
-BoardController.create = async(boardData,/* ownerId,*/ teamId = null) => {
+BoardController.create = async(boardData,ownerId, teamId = null) => {
     // TODO: create labels for the board
     const newBoard = new Board(boardData)
-    //newBoard.owner = ownerId
-    const user = null
     try {
+        console.log("de")
+        console.log(ownerId)
         console.log(teamId)
-        user = userController.addBoard(ownerId, newBoard.id)
+        const user=await userController.addBoard(ownerId, newBoard.id)
         if(teamId) teamController.addBoard(teamId, newBoard.id)
         return await newBoard.save()
     }
