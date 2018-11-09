@@ -37,8 +37,10 @@ module.exports.doAuthentication = async(email, password) => {
 module.exports.isAuthenticated = (req, res, next) => {
     try {
         const header = req.get('Authorization')
+        if (!header) throwError(400, 'Authorization header missing')
         const [type, token] = header.split(' ')
-        return next(this.decodeToken(token))
+        const decodedToken = this.decodeToken(token)
+        return next()
     }
     catch(error) {
         throw error
