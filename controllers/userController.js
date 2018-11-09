@@ -60,4 +60,15 @@ UserController.addBoard = async(userId, boardId) => {
     }
 }
 
+UserController.addBoard = async(userId, boardId) => {
+    const user = await User.findById(userId)
+        try {
+            user.boards.push(boardId)
+            team.save()
+        }
+        catch(error) {
+            return Error("Error adding board to team")
+        }
+    }
+
 module.exports = UserController;

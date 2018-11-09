@@ -21,7 +21,7 @@ BoardController.create = async(boardData,/* ownerId,*/ teamId = null) => {
     const user = null
     try {
         console.log(teamId)
-        //user = userController.addBoard(ownerId, newBoard.id)
+        user = userController.addBoard(ownerId, newBoard.id)
         if(teamId) teamController.addBoard(teamId, newBoard.id)
         return await newBoard.save()
     }
