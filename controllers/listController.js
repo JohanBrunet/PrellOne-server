@@ -38,7 +38,7 @@ ListController.update = (list, data) => {
     return List.findOneAndUpdate(query, data, options)
 }
 
-ListController.addCard = (listId, cardId) => {
+ListController.addCard = async(listId, cardId) => {
     const query = {_id: listId}
     const update = {
         $push: {
@@ -46,7 +46,8 @@ ListController.addCard = (listId, cardId) => {
         } 
     }
     const options = {new: true, upsert: true}
-    return List.findByIdAndUpdate(query, update, options)
+    const newList= await List.findByIdAndUpdate(query, update, options)
+    return newList
 }
 
 module.exports = ListController;

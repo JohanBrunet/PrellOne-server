@@ -100,8 +100,11 @@ server.listen(port);
 console.log("Server listening on port: " + port);
 const io=socketServer(server)
 io.on('connection', (socket) =>{
-	console.log("Connected to Socket!!"+ socket.id)	
-	socket.on('disconnect', ()=>{
-		console.log('Disconnected - '+ socket.id);
+    console.log("Connected to Socket!!"+ socket.id)	
+    io.on('disconnect', (socket)=>{
+        console.log('Disconnected - '+ socket.id);
     });
+	
 })
+
+module.exports.io = io

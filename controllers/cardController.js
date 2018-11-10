@@ -24,7 +24,12 @@ CardController.create = async(cardData,listId) => {
     try {
         const newCard = new Card(cardData)
         await ListController.addCard(listId, newCard.id)
-        return newCard.save()
+        const card=await newCard.save()
+        const io=require('../index').io
+        console.log(io)
+        io.emit("action",{type:"CARD_ADDED_SUCCESS",
+        card:card})
+        return card
     }
     catch(error) {
         throwError(500, error)
