@@ -38,7 +38,7 @@ module.exports.isAuthenticated = (req, res, next) => {
     try {
         const header = req.get('Authorization')
         if (!header) throwError(400, 'Authorization header missing')
-        const [type, token] = header.split(' ')
+        const token = header.split(' ')[1]
         const decodedToken = this.decodeToken(token)
         return next()
     }
@@ -59,7 +59,6 @@ encodeToken = (userId) => {
 
 module.exports.decodeToken = (token) => {
     try {
-        console.log(token)
         const userId = jwt.verify(token, randomSecretKey).id
         return userId
     }
