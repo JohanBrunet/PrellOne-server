@@ -20,7 +20,7 @@ module.exports.doAuthentication = async(email, password) => {
     }
 
     // if the user is found but the password is wrong
-    if (await passwordMatch(password, user.password)) {
+    if (await this.passwordMatch(password, user.password)) {
         const token = encodeToken(user.id);
         return authorize(user, token);
     }
@@ -36,7 +36,11 @@ module.exports.doAuthentication = async(email, password) => {
  */
 module.exports.isAuthenticated = (req, res, next) => {
     try {
-        return next(this.decodeToken(req.cookies.prellone.appAuthToken))
+        const header = req.get('Authorization')
+        if (!header) throwError(400, 'Authorization header missing')
+        const [type, token] = header.split(' ')
+        const decodedToken = this.decodeToken(token)
+        return next()
     }
     catch(error) {
         throw error
@@ -55,7 +59,9 @@ encodeToken = (userId) => {
 
 module.exports.decodeToken = (token) => {
     try {
-        return jwt.verify(token, randomSecretKey)
+        console.log(token)
+        const userId = jwt.verify(token, randomSecretKey).id
+        return userId
     }
     catch(error) {
         throwError(400, "Invalid token")
