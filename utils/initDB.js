@@ -49,7 +49,7 @@ seedCollections = async() => {
         firstName: 'Mohamed Iheb',
         lastName: 'FAIZA',
         username: 'medihebfaiza',
-        email: "iheb@prellone.com",
+        email: "iheb@prellone.fr",
         password: user1pwd,
         profilePicture: 'https://avatars1.githubusercontent.com/u/22474480?s=460&v=4'
     },
@@ -58,7 +58,7 @@ seedCollections = async() => {
         firstName: 'Marion',
         lastName: 'RUL',
         username: 'marion-rul',
-        email: "marion@prellone.com",
+        email: "marion@prellone.fr",
         password: user2pwd,
         profilePicture: 'https://bit.ly/2yHma2e'
     }
@@ -67,7 +67,7 @@ seedCollections = async() => {
         firstName: 'User',
         lastName: 'USER',
         username: 'username',
-        email: "user@prellone.com",
+        email: "user@prellone.fr",
         password: user3pwd,
         profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
     }
