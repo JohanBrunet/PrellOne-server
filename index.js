@@ -100,7 +100,16 @@ server.listen(port);
 console.log("Server listening on port: " + port);
 const io=socketServer(server)
 io.on('connection', (socket) =>{
+    
     console.log("Connected to Socket!!"+ socket.id)	
+    socket.on('joinBoard',(idBoard)=>{
+        socket.join(idBoard)
+        console.log(socket.id+ " connecter room "+(idBoard))
+    });
+    socket.on('leaveBoard',(idBoard)=>{
+        console.log(socket.id+" leave room "+(idBoard))
+        socket.leave(idBoard)
+    });
     io.on('disconnect', (socket)=>{
         console.log('Disconnected - '+ socket.id);
     });
