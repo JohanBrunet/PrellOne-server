@@ -23,8 +23,8 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
 
 router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     const newTeam=req.body
-    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
-    const team = await TeamController.create(newTeam /*,owner.id*/)
+    const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const team = await TeamController.create(newTeam ,owner.id)
     res.type('application/json')
     res.status(200)
     res.json(team)

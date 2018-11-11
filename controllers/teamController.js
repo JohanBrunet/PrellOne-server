@@ -30,9 +30,10 @@ TeamController.update = (team) => {
     return Team.findOneAndUpdate(query, team, options)
 }
 
-TeamController.create = async(teamData) => {
+TeamController.create = async(teamData,ownerId) => {
     try {
-        const newTeam = new Team(teamData)
+        const newTeam = await new Team(teamData)
+        const user=await userController.addTeam(ownerId, newTeam.id)
         return newTeam.save()
     }
     catch(error) {

@@ -30,7 +30,7 @@ UserController.getWithBoards = (username) => {
 }
 
 UserController.getWithTeams=(username)=>{
-    return User.findOne(({username: username})).populate({path: 'teams', populate: 'boards'})
+    return User.findOne(({username: username})).populate({path: 'teams', populate: [{path: 'boards', select: 'title'},{path: 'members'}]})
 }
 
 UserController.create = async(data) => {
@@ -71,5 +71,20 @@ UserController.addBoard = async(userId, boardId) => {
         throwError(500, "Update failed")
     }
 }
+
+UserController.addTeam = async(userId, teamId) => {
+    const user = await User.findById(userId)
+    try {
+        await User.updateOne({ _id: userId }, {
+            $push: { teams: teamId}
+        })
+        return user
+    }
+    catch(error) {
+        throwError(500, "Update failed")
+    }
+}
+
+
 
 module.exports = UserController;
