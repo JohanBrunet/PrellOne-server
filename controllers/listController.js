@@ -25,7 +25,11 @@ ListController.create = async(listData,boardId) => {
     try {
         const newList = new List(listData)
         await BoardController.addList(boardId, newList.id)
-        return newList.save()
+        list=await newList.save()
+        const io=require('../index').io
+        io.to(boardId).emit("action",{type:"LIST_ADDED_SUCCESS",
+        list:list})
+        return list
     }
     catch(error) {
         throwError(500, error)
