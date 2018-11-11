@@ -72,4 +72,19 @@ UserController.addBoard = async(userId, boardId) => {
     }
 }
 
+UserController.addTeam = async(userId, teamId) => {
+    const user = await User.findById(userId)
+    try {
+        await User.updateOne({ _id: userId }, {
+            $push: { teams: teamId}
+        })
+        return user
+    }
+    catch(error) {
+        throwError(500, "Update failed")
+    }
+}
+
+
+
 module.exports = UserController;
