@@ -5,7 +5,7 @@ const userController = require('../controllers/userController');
 
     
     router.post('/login', asyncWrapper( async(req, res, next) => {
-        const result = await authenticate(req.body.email, req.body.password)
+        const result = await authenticate(req.body.credential, req.body.password)
 
         res.type('application/json');
         res.status(200);

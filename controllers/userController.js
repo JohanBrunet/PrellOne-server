@@ -5,16 +5,14 @@ const throwError = require('../utils/throwError')
 
 let UserController = () => {}
 
-UserController.getByEmail = (em) => {
-    return User.findOne({email: em});
+UserController.getByEmail = (em, withPassword = false) => {
+    if (withPassword) return User.findOne({email: em}).select("+password")
+    else return User.findOne({email: em})
 }
 
-UserController.getByUsername = (uname) => {
-    return User.findOne({username: uname});
-}
-
-UserController.getByEmailWithPassword = (value) => {
-    return User.findOne({email: value}).select("+password");
+UserController.getByUsername = (uname, withPassword = false) => {
+    if (withPassword) return User.findOne({username: uname}).select("+password")
+    else return User.findOne({username: uname})
 }
 
 UserController.getById = (id) => {
@@ -37,7 +35,9 @@ UserController.create = async(data) => {
     let user = data
     if(!user.username) user.username = user.firstName + user.lastName
     user.initials = user.firstName.charAt(0) + user.lastName.charAt(0)
-    user.password = await authMiddleware.hashPassword(user.password)
+    if (user.password) {
+        user.password = await authMiddleware.hashPassword(user.password)
+    }
     const newUser = new User(user)
     return newUser.save()
 }
@@ -52,7 +52,7 @@ UserController.updatePassword = async(userId, oldPwd, newPwd) => {
     const user = await User.findById(userId).select('+password')
     if (await authMiddleware.passwordMatch(oldPwd, user.password)) {
         const newPwdHash = await authMiddleware.hashPassword(newPwd)
-        return await User.findOneAndUpdate({ id: userId }, { $set: { password: newPwdHash} }, { new: true })
+        return await User.findOneAndUpdate({ id: userId }, { $set: { password: newPwdHash } }, { new: true })
     }
     else throwError(400, "Password do not match")
     
@@ -62,8 +62,8 @@ UserController.updatePassword = async(userId, oldPwd, newPwd) => {
 UserController.addBoard = async(userId, boardId) => {
     const user = await User.findById(userId)
     try {
-        await User.updateOne({ _id: userId }, {
-            $push: { boards: boardId}
+        await User.findOneAndUpdate({ _id: userId }, {
+            $push: { boards: boardId }
         })
         return user
     }
