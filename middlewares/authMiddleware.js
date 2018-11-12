@@ -4,6 +4,7 @@ const saltRounds = 10;
 const randomSecretKey = process.env.SECRET_KEY;
 
 const userController = require('../controllers/userController');
+const ldap = require('../controllers/ldapController')
 const throwError = require('../utils/throwError')
 
 /**
@@ -12,23 +13,46 @@ const throwError = require('../utils/throwError')
  * @param res
  * @param next
  */
-module.exports.doAuthentication = async(email, password) => {
-
-    let user = await userController.getByEmailWithPassword(email);
-    if (!user || user.length == 0) {
-        throwError(404, 'Wrong email or password')
+module.exports.doAuthentication = async (credential, password) => {
+    try {
+        const ldapUser = await ldap.find(credential, password)
+        await ldap.auth(ldapUser, password)
+        let user = await userController.getByUsername(credential)
+        if (!user || user.length == 0) {
+            console.log("user does not exist locally")
+            let [fn, ln] = credential.split('.')
+            fn = fn.charAt(0).toUpperCase() + fn.substr(1)
+            ln = ln.charAt(0).toUpperCase() + ln.substr(1)
+            const newuser = {
+                firstName: fn,
+                lastName: ln,
+                username: credential,
+                email: `${credential}@etu.umontpellier.fr`,
+                profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
+            }
+            user = await userController.create(newuser)
+        }
+        const token = encodeToken(user.id)
+        return authorize(user, token)
     }
+    catch (error) {
+        console.log('error')
+        console.error(error)
+        let user = await userController.getByEmail(credential, true) || await userController.getByUsername(credential, true)
+        if (!user || user.length == 0) {
+            throwError(404, 'Invalid credentials')
+        }
 
-    // if the user is found but the password is wrong
-    if (await this.passwordMatch(password, user.password)) {
-        const token = encodeToken(user.id);
-        return authorize(user, token);
+        // if the user is found but the password is wrong
+        if (await this.passwordMatch(password, user.password)) {
+            const token = encodeToken(user.id);
+            return authorize(user, token);
+        }
+        else {
+            user = false;
+            throwError(401, 'Invalid credentials')
+        };
     }
-    else  {
-        user = false;
-        throwError(401, 'Wrong email or password')
-    };
-
 }
 
 /**
@@ -42,19 +66,18 @@ module.exports.isAuthenticated = (req, res, next) => {
         const decodedToken = this.decodeToken(token)
         return next()
     }
-    catch(error) {
+    catch (error) {
         throw error
     }
 }
 
-authorize = (user, token) => {
-    let result = user.toJSON()
-    delete result.password
-    return {user: result, token: token};
+authorize = async (user, token) => {
+    let userWithBoards = await userController.getWithBoards(user.username)
+    return { user: userWithBoards, token: token }
 }
 
 encodeToken = (userId) => {
-    return jwt.sign({'id': userId}, randomSecretKey);
+    return jwt.sign({ 'id': userId }, randomSecretKey);
 }
 
 module.exports.decodeToken = (token) => {
@@ -62,15 +85,15 @@ module.exports.decodeToken = (token) => {
         const userId = jwt.verify(token, randomSecretKey).id
         return userId
     }
-    catch(error) {
+    catch (error) {
         throwError(400, "Invalid token")
     }
 }
 
-module.exports.hashPassword = async(plainPassword) => {
+module.exports.hashPassword = async (plainPassword) => {
     return await bcrypt.hash(plainPassword, saltRounds)
 }
 
-module.exports.passwordMatch = async(plainPassword, passwordHash) => {
+module.exports.passwordMatch = async (plainPassword, passwordHash) => {
     return await bcrypt.compare(plainPassword, passwordHash);;
 }
