@@ -46,8 +46,8 @@ seedCollections = async() => {
      */
     user1pwd = await authMiddleware.hashPassword("faiza")
     user1 = {
-        firstName: 'Mohamed Iheb',
-        lastName: 'FAIZA',
+        firstname: 'Mohamed Iheb',
+        lastname: 'FAIZA',
         username: 'medihebfaiza',
         email: "iheb@prellone.fr",
         password: user1pwd,
@@ -55,8 +55,8 @@ seedCollections = async() => {
     },
     user2pwd = await authMiddleware.hashPassword("rul")
     user2 = {
-        firstName: 'Marion',
-        lastName: 'RUL',
+        firstname: 'Marion',
+        lastname: 'RUL',
         username: 'marion-rul',
         email: "marion@prellone.fr",
         password: user2pwd,
@@ -64,8 +64,8 @@ seedCollections = async() => {
     }
     user3pwd = await authMiddleware.hashPassword("user")
     user3 = {
-        firstName: 'User',
-        lastName: 'USER',
+        firstname: 'User',
+        lastname: 'USER',
         username: 'username',
         email: "user@prellone.fr",
         password: user3pwd,
