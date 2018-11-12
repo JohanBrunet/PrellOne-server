@@ -56,6 +56,11 @@ UserSchema.pre('save', async function(next) {
     if(user) throwError(400, "This username is already taken!")
     next()
 })
+.pre('save', function(next) {
+    if(!this.username) this.username = this.firstname + this.lastname
+    this.initials = this.firstname.charAt(0) + this.lastname.charAt(0)
+    next()
+})
 
 UserSchema.options.toJSON = {
     transform: function(doc, ret, options) {
