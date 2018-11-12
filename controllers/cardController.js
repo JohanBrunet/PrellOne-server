@@ -14,10 +14,14 @@ CardController.getAll = async() => {
     return await Card.find();
 }
 
-CardController.update = (card) => {
+CardController.update = async(card) => {
     const query = {'_id': card.id}
     const options = {new: true, upsert: true}
-    return Card.findOneAndUpdate(query, card, options)
+    const newCard= await Card.findOneAndUpdate(query, card, options)
+    const io=require('../index').io
+        io.to(newCard.board).emit("action",{type:"CARD_UPDATED_SUCCESS",
+        card:newCard})
+    return newCard
 }
 
 CardController.create = async(cardData,listId) => {
@@ -25,7 +29,6 @@ CardController.create = async(cardData,listId) => {
         const newCard = new Card(cardData)
         await ListController.addCard(listId, newCard.id)
         const card=await newCard.save()
-        console.log(cardData.board)
         const io=require('../index').io
         io.to(cardData.board).emit("action",{type:"CARD_ADDED_SUCCESS",
         card:card})
