@@ -10,9 +10,9 @@ config.api.devHost = 'http://localhost';
 config.api.devPort = 8080;
 
 config.api.stagingHost = 'prellone-dev-api.igpolytech.fr';
-config.api.stagingPort = 80;
+config.api.stagingPort = 3000;
 
 config.api.host = 'prellone-api.igpolytech.fr';
-config.api.port = 80;
+config.api.port = 3000;
 
 module.exports = config;
