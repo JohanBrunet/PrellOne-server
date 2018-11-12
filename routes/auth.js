@@ -10,7 +10,15 @@ const userController = require('../controllers/userController');
         res.type('application/json');
         res.status(200);
         return res.json(result);
-    }));
+    }))
+    router.post('/login/ldap', asyncWrapper( async(req, res, next) => {
+        console.log("login with ldap")
+        const result = await authenticate(req.body.credential, req.body.password, true)
+
+        res.type('application/json');
+        res.status(200);
+        return res.json(result);
+    }))
 
     router.post('/register', asyncWrapper( async(req, res, next) => {
         let newUser = req.body;

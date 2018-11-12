@@ -13,34 +13,39 @@ const throwError = require('../utils/throwError')
  * @param res
  * @param next
  */
-module.exports.doAuthentication = async (credential, password) => {
-    try {
-        const ldapUser = await ldap.find(credential, password)
-        await ldap.auth(ldapUser, password)
-        let user = await userController.getByUsername(credential)
-        if (!user || user.length == 0) {
-            console.log("user does not exist locally")
-            let [fn, ln] = credential.split('.')
-            fn = fn.charAt(0).toUpperCase() + fn.substr(1)
-            ln = ln.charAt(0).toUpperCase() + ln.substr(1)
-            const newuser = {
-                firstName: fn,
-                lastName: ln,
-                username: credential,
-                email: `${credential}@etu.umontpellier.fr`,
-                profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
+module.exports.doAuthentication = async (credential, password, withLdap = false) => {
+    if (withLdap) {
+        try {
+            const ldapUser = await ldap.find(credential, password)
+            await ldap.auth(ldapUser, password)
+            let user = await userController.getByUsername(credential)
+            if (!user || user.length == 0) {
+                console.log("user does not exist locally")
+                let [fn, ln] = credential.split('.')
+                fn = fn.charAt(0).toUpperCase() + fn.substr(1)
+                ln = ln.charAt(0).toUpperCase() + ln.substr(1)
+                const newuser = {
+                    firstName: fn,
+                    lastName: ln,
+                    username: credential,
+                    email: `${credential}@etu.umontpellier.fr`,
+                    profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
+                }
+                user = await userController.create(newuser)
             }
-            user = await userController.create(newuser)
+            const token = encodeToken(user.id)
+            return authorize(user, token)
         }
-        const token = encodeToken(user.id)
-        return authorize(user, token)
+        catch (error) {
+            console.log('error')
+            console.error(error)
+            throwError(401, 'Invalid credentials')
+        }
     }
-    catch (error) {
-        console.log('error')
-        console.error(error)
+    else {
         let user = await userController.getByEmail(credential, true) || await userController.getByUsername(credential, true)
         if (!user || user.length == 0) {
-            throwError(404, 'Invalid credentials')
+            throwError(401, 'Invalid credentials')
         }
 
         // if the user is found but the password is wrong
@@ -51,7 +56,7 @@ module.exports.doAuthentication = async (credential, password) => {
         else {
             user = false;
             throwError(401, 'Invalid credentials')
-        };
+        }
     }
 }
 
