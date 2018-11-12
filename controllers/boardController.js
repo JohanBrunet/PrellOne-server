@@ -16,18 +16,20 @@ BoardController.getAll = async() => {
 }
 
 BoardController.create = async(boardData,ownerId, teamId = null) => {
+    let user = null
     // TODO: create labels for the board
+    boardData.members = [ownerId]
     const newBoard = new Board(boardData)
     try {
         console.log("de")
         console.log(ownerId)
         console.log(teamId)
-        const user=await userController.addBoard(ownerId, newBoard.id)
+        user = await userController.addBoard(ownerId, newBoard.id)
         if(teamId) teamController.addBoard(teamId, newBoard.id)
         return await newBoard.save()
     }
     catch(error) {
-        //if (user) await user.save()
+        if (user) await user.save()
         throw error
     }
 }
