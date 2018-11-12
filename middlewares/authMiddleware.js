@@ -25,10 +25,11 @@ module.exports.doAuthentication = async (credential, password, withLdap = false)
                 fn = fn.charAt(0).toUpperCase() + fn.substr(1)
                 ln = ln.charAt(0).toUpperCase() + ln.substr(1)
                 const newuser = {
-                    firstName: fn,
-                    lastName: ln,
+                    firstname: fn,
+                    lastname: ln,
                     username: credential,
                     email: `${credential}@etu.umontpellier.fr`,
+                    loginType: 'ldap',
                     profilePicture: 'https://prellone.s3.amazonaws.com/johan/lapin-c2b35fd3-1d16-4572-88ca-cfcbad6d17c2.jpeg'
                 }
                 user = await userController.create(newuser)
