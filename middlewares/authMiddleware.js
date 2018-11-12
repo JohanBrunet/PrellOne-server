@@ -20,7 +20,6 @@ module.exports.doAuthentication = async (credential, password, withLdap = false)
             await ldap.auth(ldapUser, password)
             let user = await userController.getByUsername(credential)
             if (!user || user.length == 0) {
-                console.log("user does not exist locally")
                 let [fn, ln] = credential.split('.')
                 fn = fn.charAt(0).toUpperCase() + fn.substr(1)
                 ln = ln.charAt(0).toUpperCase() + ln.substr(1)
