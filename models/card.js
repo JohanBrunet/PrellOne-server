@@ -17,7 +17,7 @@ const CardSchema = new Schema({
     },
     position: Number,
     dueDate: Date,
-    closed: Boolean,
+    done: Boolean,
     checklists: [{
         type: Schema.Types.ObjectId,
         ref: 'Checklist'
