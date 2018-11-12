@@ -11,8 +11,7 @@ const userController = require('../controllers/userController');
         res.status(200);
         return res.json(result);
     }))
-    router.post('/login/ldap', asyncWrapper( async(req, res, next) => {
-        console.log("login with ldap")
+    router.post('/login/polytech', asyncWrapper( async(req, res, next) => {
         const result = await authenticate(req.body.credential, req.body.password, true)
 
         res.type('application/json');
