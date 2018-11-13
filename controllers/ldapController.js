@@ -1,9 +1,9 @@
 const ldap = require('ldapjs')
 const env = process.env
 
-// const ldapClient = ldap.createClient({
-//     url: `${env.LDAP_HOST}:${env.LDAP_PORT}`
-// })
+const ldapClient = ldap.createClient({
+    url: `${env.LDAP_HOST}:${env.LDAP_PORT}`
+})
 
 let LdapController = () => {}
 

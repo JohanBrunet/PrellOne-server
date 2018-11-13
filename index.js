@@ -60,6 +60,14 @@ if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'local'){
  */
 app.use('/api', require('./routes/router'));
 
+process.on('uncaughtException', (err) => {
+    const error = new Error()
+    if (err.code && err.code === 'ETIMEDOUT' && err.address && err.address === '162.38.114.8') {
+        error.status = 500
+        error.message = "Cannot connect with Polytech"
+    }
+})
+
 // Error handlers
 if (env === 'production' ) {
     // no stacktraces leaked to user
