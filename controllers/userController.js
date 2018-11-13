@@ -50,7 +50,6 @@ UserController.updatePassword = async(userId, oldPwd, newPwd) => {
     const user = await User.findById(userId).select('+password')
     if (await authMiddleware.passwordMatch(oldPwd, user.password)) {
         const newPwdHash = await authMiddleware.hashPassword(newPwd)
-        return await User.findOneAndUpdate({ id: userId }, { $set: { password: newPwdHash } }, { new: true })
         return await User.findOneAndUpdate({ _id: userId }, { $set: { "password": newPwdHash } }, { new: true })
     }
     else throwError(400, "Password do not match")
