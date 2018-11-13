@@ -33,6 +33,8 @@ UserController.getWithTeams=(username)=>{
 
 UserController.create = async(data) => {
     let user = data
+    if(!user.username) user.username = user.firstname + user.lastname
+    user.initials = user.firstname.charAt(0) + user.lastname.charAt(0)
     if (user.password) {
         user.password = await authMiddleware.hashPassword(user.password)
     }
