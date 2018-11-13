@@ -36,10 +36,11 @@ ListController.create = async(listData,boardId) => {
     }
 }
 
-ListController.update = (list, data) => {
-    const query = {'id': list.id}
+ListController.update = async (list) => {
+    const query = {'_id': list.id}
     const options = {new: true, upsert: true}
-    return List.findOneAndUpdate(query, data, options)
+    const newList = await List.findOneAndUpdate(query, list, options)  
+    return newList
 }
 
 ListController.addCard = async(listId, cardId) => {
