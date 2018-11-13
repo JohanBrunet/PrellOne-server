@@ -30,4 +30,12 @@ router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(list);
 }))
 
+router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const updatedList = req.body
+    const list = await ListController.update(updatedList)
+    res.type('application/json')
+    res.status(200)
+    res.json(list)
+}))
+
 module.exports = router;
