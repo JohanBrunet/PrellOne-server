@@ -44,14 +44,26 @@ router.get('/:id/lists', auth, asyncWrapper( async(req, res, next) => {
 
 router.post('/', auth, asyncWrapper( async(req, res, next) => {
     const newBoard = req.body
-    const teamId=req.body.teamId
+    const teamIds=req.body.teams
     const token = req.get('Authorization').split(' ')[1]
     const owner = decodeToken(token)
     console.log(owner)
-    const board = await BoardController.create(newBoard ,owner,teamId)
+    const board = await BoardController.create(newBoard ,owner,teamIds)
     res.type('application/json')
     res.status(200)
     res.json(board)
+}))
+
+router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const username = req.body.username
+    const boardId = req.body.boardId
+    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
+    const member = await BoardController.addMember(boardId,username/*,owner.id*/)
+    console.log("FOUND MEMBER")
+    console.log(member)
+    res.type('application/json')
+    res.status(200)
+    res.json(member)
 }))
 
 module.exports = router;

@@ -50,14 +50,21 @@ CardController.updateDesc=(desc,cardId)=>{
     return Card.findByIdAndUpdate(query, update, options)
 }
 
-CardController.addMember=(userId,cardId)=>{
+CardController.addMember= async (cardId, username) => {
     const query = {_id: cardId}
-    const update = {
-        $push: {
-            members: userId
-        } 
+    const member = await UserController.getByUsername(username)
+    if (!member){
+        throwError(404, "Member with username not found")
     }
-    const options = {new: true, upsert: true}
-    return Card.findByIdAndUpdate(query, update, options)
+    else {
+        const update = {
+            $addToSet: {
+                members: member._id
+            } 
+        }
+        const options = {new: true, upsert: true}
+        const newCard = await Card.findByIdAndUpdate(query, update, options)
+        return member
+    }
 }
 module.exports = CardController;
