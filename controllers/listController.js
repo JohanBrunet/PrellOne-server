@@ -40,6 +40,9 @@ ListController.update = async (list) => {
     const query = {'_id': list.id}
     const options = {new: true, upsert: true}
     const newList = await List.findOneAndUpdate(query, list, options)  
+    const io=require('../index').io
+        io.to(newList.board).emit("action",{type:"LIST_UPDATED_SUCCESS",
+        list:newList})
     return newList
 }
 
