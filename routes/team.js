@@ -43,12 +43,14 @@ router.put('/', /* auth, */ asyncWrapper( async(req, res, next) => {
 }))
 
 router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
-    const idUser=req.body.idUser
-    const idTeam=req.body.idTeam
+    const username = req.body.username
+    const teamId = req.body.id
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
-    const team = await TeamController.addMember(idUser,idTeam/*,owner.id*/)
+    const member = await TeamController.addMember(teamId,username/*,owner.id*/)
+    console.log("FOUND MEMBER")
+    console.log(member)
     res.type('application/json')
     res.status(200)
-    res.json(team)
+    res.json(member)
 }))
 module.exports = router;

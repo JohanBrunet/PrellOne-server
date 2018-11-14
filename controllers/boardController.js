@@ -15,7 +15,7 @@ BoardController.getAll = async() => {
     return await Board.find();
 }
 
-BoardController.create = async(boardData,ownerId, teamId = null) => {
+BoardController.create = async(boardData,ownerId, teamIds = null) => {
     let user = null
     // TODO: create labels for the board
     boardData.members = [ownerId]
@@ -25,7 +25,7 @@ BoardController.create = async(boardData,ownerId, teamId = null) => {
         console.log(ownerId)
         console.log(teamId)
         user = await userController.addBoard(ownerId, newBoard.id)
-        if(teamId) teamController.addBoard(teamId, newBoard.id)
+        if(teamIds) teamController.addBoard(teamId, newBoard.id) // TODO Bottero: Parcourir tous les team ids et addBoard un par un
         return await newBoard.save()
     }
     catch(error) {
@@ -38,6 +38,26 @@ BoardController.update = (board, data) => {
     const query = {'id': board.id}
     const options = {new: true, upsert: true}
     return Board.findOneAndUpdate(query, data, options)
+}
+
+BoardController.addMember= async (boardId, username) => {
+    console.log("Board Id RECEIVED :")
+    console.log(boardId)
+    const query = {_id: boardId}
+    const member = await userController.getByUsername(username)
+    if (!member){
+        throwError(404, "Member with username not found")
+    }
+    else {
+        const update = {
+            $addToSet: {
+                members: member._id
+            } 
+        }
+        const options = {new: true, upsert: true}
+        const newBoard = await Board.findByIdAndUpdate(query, update, options)
+        return member
+    }
 }
 
 BoardController.addMembers = async(boardId, membersIds) => {

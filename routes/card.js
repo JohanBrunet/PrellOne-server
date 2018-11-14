@@ -78,13 +78,15 @@ router.put('/updateDesc',/* auth, */ asyncWrapper( async(req, res, next) => {
 }))
 
 router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
-    const idUser=req.body.idUser
-    const idCard=req.body.idCard
+    const username = req.body.username
+    const cardId = req.body.cardId
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
-    const card = await cardController.addMember(idUser,idCard/*,owner.id*/)
+    const member = await cardController.addMember(cardId, username/*,owner.id*/)
+    console.log("FOUND MEMBER")
+    console.log(member)
     res.type('application/json')
     res.status(200)
-    res.json(card)
+    res.json(member)
 }))
 
 module.exports = router;

@@ -12,7 +12,9 @@ UserController.getByEmail = (em, withPassword = false) => {
 
 UserController.getByUsername = (uname, withPassword = false) => {
     if (withPassword) return User.findOne({username: uname}).select("+password")
-    else return User.findOne({username: uname})
+    
+    else {console.log(uname); return User.findOne({username: uname}).exec()
+}
 }
 
 UserController.getById = (id) => {

@@ -1,5 +1,6 @@
 const Team = require('../models/team')
 const userController = require('./userController')
+const throwError = require('../utils/throwError')
 
 let TeamController = () => {}
 
@@ -41,14 +42,21 @@ TeamController.create = async(teamData,ownerId) => {
     }
 }
 
-TeamController.addMember=(userId,teamId)=>{
+TeamController.addMember= async (teamId, username) => {
     const query = {_id: teamId}
-    const update = {
-        $push: {
-            members: userId
-        } 
+    const member = await userController.getByUsername(username)
+    if (!member){
+        throwError(404, "Member with username not found")
     }
-    const options = {new: true, upsert: true}
-    return Team.findByIdAndUpdate(query, update, options)
+    else {
+        const update = {
+            $addToSet: {
+                members: member._id
+            } 
+        }
+        const options = {new: true, upsert: true}
+        const newTeam = await Team.findByIdAndUpdate(query, update, options)
+        return member
+    }
 }
 module.exports = TeamController;
