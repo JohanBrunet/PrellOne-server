@@ -15,17 +15,27 @@ BoardController.getAll = async() => {
     return await Board.find();
 }
 
-BoardController.create = async(boardData,ownerId, teamIds = null) => {
+BoardController.create = async(boardData,ownerId, team = null) => {
     let user = null
+    let newBoard
     // TODO: create labels for the board
-    boardData.members = [ownerId]
-    const newBoard = new Board(boardData)
     try {
-        console.log("de")
-        console.log(ownerId)
-        console.log(teamId)
-        user = await userController.addBoard(ownerId, newBoard.id)
-        if(teamIds) teamController.addBoard(teamId, newBoard.id) // TODO Bottero: Parcourir tous les team ids et addBoard un par un
+        if(team){
+                boardData.members=[]
+                for (member of team.members) {
+                    boardData.members.push(member.id)
+                }
+                boardData.teams=[team.id]
+                newBoard = new Board(boardData)
+                const newteam=await teamController.addBoard(team.id, newBoard.id)
+                for (member of team.members) {
+                    user = await userController.addBoard(member.id, newBoard.id)
+                }
+        } else{
+            boardData.members = [ownerId]
+            newBoard = new Board(boardData)
+            user = await userController.addBoard(ownerId, newBoard.id)
+        } 
         return await newBoard.save()
     }
     catch(error) {

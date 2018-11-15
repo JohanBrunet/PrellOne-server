@@ -44,11 +44,11 @@ router.get('/:id/lists', auth, asyncWrapper( async(req, res, next) => {
 
 router.post('/', auth, asyncWrapper( async(req, res, next) => {
     const newBoard = req.body
-    const teamIds=req.body.teams
+    const team=req.body.team
     const token = req.get('Authorization').split(' ')[1]
     const owner = decodeToken(token)
     console.log(owner)
-    const board = await BoardController.create(newBoard ,owner,teamIds)
+    const board = await BoardController.create(newBoard ,owner,team)
     res.type('application/json')
     res.status(200)
     res.json(board)
