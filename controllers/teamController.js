@@ -28,7 +28,7 @@ TeamController.getAll = async() => {
 }
 
 TeamController.getByName = (name) => {
-    return Team.findOne({name: name})
+    return Team.findOne({name: name}).populate('members')
 }
 
 TeamController.update = (team) => {
