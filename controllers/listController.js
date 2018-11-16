@@ -1,6 +1,7 @@
 const List = require('../models/list');
 const BoardController = require('./boardController')
 const mongoose = require('mongoose')
+
 const throwError = require('../utils/throwError')
 
 let ListController = () => {}
@@ -39,9 +40,19 @@ ListController.create = async(listData,boardId) => {
 ListController.update = async (list) => {
     const query = {'_id': list.id}
     const options = {new: true, upsert: true}
-    const newList = await List.findOneAndUpdate(query, list, options)  
+    const newList = await List.findOneAndUpdate(query, list, options).populate([{ path: 'cards', populate: { path: 'members' }},{path:'cards',populate: { path: 'labels' }}])
+
     const io=require('../index').io
         io.to(newList.board).emit("action",{type:"LIST_UPDATED_SUCCESS",
+        list:newList})
+    return newList
+}
+ListController.updateTitle = async (list) => {
+    const query = {'_id': list.id}
+    const options = {new: true, upsert: true}
+    const newList = await List.findOneAndUpdate(query, list, options)
+    const io=require('../index').io
+        io.to(newList.board).emit("action",{type:"TITLE_LIST_UPDATED_SUCCESS",
         list:newList})
     return newList
 }
