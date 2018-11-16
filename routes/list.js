@@ -37,5 +37,12 @@ router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
     res.status(200)
     res.json(list)
 }))
+router.put('/title',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const updatedList = req.body
+    const list = await ListController.updateTitle(updatedList)
+    res.type('application/json')
+    res.status(200)
+    res.json(list)
+}))
 
 module.exports = router;
