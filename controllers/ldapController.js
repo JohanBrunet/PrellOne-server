@@ -7,8 +7,8 @@ const ldapClient = ldap.createClient({
 
 let LdapController = () => {}
 
-LdapController.find = (cred) => {
-    return new Promise( (resolve, reject) => {
+LdapController.find = async(cred) => {
+    return await new Promise( (resolve, reject) => {
         const knownUser = `cn=${env.LDAP_USER},${env.LDAP_USER_OU},${env.LDAP_OU},${env.LDAP_DC}`
         const knownUserPwd = env.LDAP_PWD
         ldapClient.bind(knownUser, knownUserPwd, (err) => {
@@ -33,8 +33,8 @@ LdapController.find = (cred) => {
     })
 }
 
-LdapController.auth = (dn, pwd) => {
-    return new Promise( (resolve, reject) => {
+LdapController.auth = async(dn, pwd) => {
+    return await new Promise( (resolve, reject) => {
         ldapClient.bind(dn, pwd, (err) => {
             if (err) reject(err)
             else resolve()
