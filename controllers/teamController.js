@@ -1,6 +1,7 @@
 const Team = require('../models/team')
 const userController = require('./userController')
 const throwError = require('../utils/throwError')
+const boardController=require('./boardController')
 
 let TeamController = () => {}
 
@@ -51,6 +52,13 @@ TeamController.create = async(teamData,ownerId) => {
 TeamController.addMember= async (teamId, username) => {
     const query = {_id: teamId}
     const member = await userController.getByUsername(username)
+    const team= await Team.findById(teamId)
+    console.log(team.boards)
+    let array = []
+    for (let board of team.boards) {
+        array.push(() =>boardController.addMember(board,username))
+    }
+    const res = await Promise.all(array)
     if (!member){
         throwError(404, "Member with username not found")
     }
