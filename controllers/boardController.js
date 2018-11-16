@@ -51,7 +51,6 @@ BoardController.update = (board, data) => {
 }
 
 BoardController.addMember= async (boardId, username) => {
-    console.log("ici")
     const query = {_id: boardId}
     const member = await userController.getByUsername(username)
     if (!member){
