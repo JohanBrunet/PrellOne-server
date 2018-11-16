@@ -57,13 +57,19 @@ router.post('/', auth, asyncWrapper( async(req, res, next) => {
 router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
     const username = req.body.username
     const boardId = req.body.boardId
-    //const owner = decodeToken(req.cookies.prellone.appAuthToken)
     const member = await BoardController.addMember(boardId,username/*,owner.id*/)
-    console.log("FOUND MEMBER")
-    console.log(member)
     res.type('application/json')
     res.status(200)
     res.json(member)
+}))
+
+router.put('/addTeam',/* auth, */ asyncWrapper( async(req, res, next) => {
+    const name = req.body.name
+    const boardId = req.body.boardId
+    const team = await BoardController.addTeam(boardId,name)
+    res.type('application/json')
+    res.status(200)
+    res.json(team)
 }))
 
 module.exports = router;

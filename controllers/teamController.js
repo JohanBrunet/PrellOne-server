@@ -27,6 +27,10 @@ TeamController.getAll = async() => {
     return await Team.find();
 }
 
+TeamController.getByName = (name) => {
+    return Team.findOne({name: name})
+}
+
 TeamController.update = (team) => {
     const query = {'_id': team.id}
     const options = {new: true, upsert: true}
