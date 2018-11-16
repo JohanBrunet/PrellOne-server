@@ -53,16 +53,17 @@ TeamController.addMember= async (teamId, username) => {
     const query = {_id: teamId}
     const member = await userController.getByUsername(username)
     const team= await Team.findById(teamId)
-    console.log(team.boards)
-    let array = []
-    for (let board of team.boards) {
-        array.push(() =>boardController.addMember(board,username))
-    }
-    const res = await Promise.all(array)
+    
     if (!member){
         throwError(404, "Member with username not found")
     }
     else {
+        let array = []
+        for (let board of team.boards) {
+            array.push(() =>userController.addBoard(member.id,board.id))
+        }
+        const res = await Promise.all(array)
+        const newMember=await userController.addTeam(member.id,teamId)
         const update = {
             $addToSet: {
                 members: member._id
@@ -70,7 +71,7 @@ TeamController.addMember= async (teamId, username) => {
         }
         const options = {new: true, upsert: true}
         const newTeam = await Team.findByIdAndUpdate(query, update, options)
-        return member
+        return newMember
     }
 }
 module.exports = TeamController;
