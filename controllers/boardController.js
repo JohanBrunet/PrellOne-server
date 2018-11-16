@@ -78,12 +78,15 @@ BoardController.addTeam= async (boardId, name) => {
     else {
         const update = {
             $addToSet: {
-                teams: team._id
-            } 
+                teams: team._id,
+                members: team.members
+            }
         }
         const options = {new: true, upsert: true}
         const newBoard = await Board.findByIdAndUpdate(query, update, options)
         await teamController.addBoard(team._id, newBoard._id)
+        console.log("Returned Team")
+        console.log(team)
         return team
     }
 }
