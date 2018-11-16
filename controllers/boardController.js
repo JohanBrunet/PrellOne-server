@@ -51,8 +51,6 @@ BoardController.update = (board, data) => {
 }
 
 BoardController.addMember= async (boardId, username) => {
-    console.log("Board Id RECEIVED :")
-    console.log(boardId)
     const query = {_id: boardId}
     const member = await userController.getByUsername(username)
     if (!member){
@@ -66,7 +64,30 @@ BoardController.addMember= async (boardId, username) => {
         }
         const options = {new: true, upsert: true}
         const newBoard = await Board.findByIdAndUpdate(query, update, options)
+        await userController.addBoard(member._id, newBoard._id)
         return member
+    }
+}
+
+BoardController.addTeam= async (boardId, name) => {
+    const query = {_id: boardId}
+    const team = await teamController.getByName(name)
+    if (!team){
+        throwError(404, "Team with name not found")
+    }
+    else {
+        const update = {
+            $addToSet: {
+                teams: team._id,
+                members: team.members
+            }
+        }
+        const options = {new: true, upsert: true}
+        const newBoard = await Board.findByIdAndUpdate(query, update, options)
+        await teamController.addBoard(team._id, newBoard._id)
+        console.log("Returned Team")
+        console.log(team)
+        return team
     }
 }
 

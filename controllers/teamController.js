@@ -7,9 +7,9 @@ let TeamController = () => {}
 TeamController.addBoard = async(teamId, boardId) => {
     const team = await Team.findById(teamId)
         try {
-
-            team.boards.push(boardId)
-    
+            if (!team.boards.some(oldBoardId => oldBoardId.equals(boardId))){
+                team.boards.push(boardId)
+            }
             team.save()
         }
         catch(error) {
@@ -25,6 +25,10 @@ TeamController.getById = async(id) => {
 
 TeamController.getAll = async() => {
     return await Team.find();
+}
+
+TeamController.getByName = (name) => {
+    return Team.findOne({name: name}).populate('members')
 }
 
 TeamController.update = (team) => {
