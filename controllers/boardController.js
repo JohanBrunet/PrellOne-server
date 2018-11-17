@@ -56,7 +56,6 @@ BoardController.addMember= async (boardId, username) => {
     const member = await userController.getByUsername(username)
 
     const hasBoard = await userController.hasBoard(member, boardId)
-    console.log(hasBoard)
     if (!member){
         throwError(404, "Member with username not found")
     }
@@ -95,7 +94,7 @@ BoardController.addTeam= async (boardId, name) => {
         }
         const options = {new: true, upsert: true}
         const newBoard = await Board.findByIdAndUpdate(query, update, options)
-        console.log(newBoard)
+    
         const newTeam=await teamController.addBoard(team._id, newBoard._id)
         const io=require('../index').io
         const payload={team:team,id:boardId}
