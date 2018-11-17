@@ -64,8 +64,12 @@ BoardController.addMember= async (boardId, username) => {
         }
         const options = {new: true, upsert: true}
         const newBoard = await Board.findByIdAndUpdate(query, update, options)
-        await userController.addBoard(member._id, newBoard._id)
-        return member
+        const newMember= await userController.addBoard(member._id, newBoard._id)
+        const io=require('../index').io
+        const payload={member:newMember,id:boardId}
+        io.to(newBoard._id).emit("action",{type:"MEMBER_ADDED_BOARD_SUCCESS",
+        payload})
+        return newMember
     }
 }
 
@@ -84,9 +88,12 @@ BoardController.addTeam= async (boardId, name) => {
         }
         const options = {new: true, upsert: true}
         const newBoard = await Board.findByIdAndUpdate(query, update, options)
-        await teamController.addBoard(team._id, newBoard._id)
-        console.log("Returned Team")
-        console.log(team)
+        console.log(newBoard)
+        const newTeam=await teamController.addBoard(team._id, newBoard._id)
+        const io=require('../index').io
+        const payload={team:team,id:boardId}
+        io.to(newBoard._id).emit("action",{type:"TEAM_ADDED_BOARD_SUCCESS",
+        payload})
         return team
     }
 }
