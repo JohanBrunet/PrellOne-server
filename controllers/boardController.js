@@ -1,6 +1,7 @@
 const Board = require('../models/board')
 const userController = require('./userController')
 const teamController=require('./teamController')
+const throwError=require('../utils/throwError')
 
 let BoardController = () => {}
 
@@ -53,8 +54,14 @@ BoardController.update = (board, data) => {
 BoardController.addMember= async (boardId, username) => {
     const query = {_id: boardId}
     const member = await userController.getByUsername(username)
+
+    const hasBoard = await userController.hasBoard(member, boardId)
+    console.log(hasBoard)
     if (!member){
         throwError(404, "Member with username not found")
+    }
+    else if(hasBoard){
+        throwError(400, "Board already added")
     }
     else {
         const update = {
@@ -98,24 +105,6 @@ BoardController.addTeam= async (boardId, name) => {
     }
 }
 
-BoardController.addMembers = async(boardId, membersIds) => {
-    const board = await Board.findById(boardId)
-    const addMember = async(memberId) => {
-        try {
-            const user = await userController.addBoard(memberId, boardId)
-            board.members.push(user.id)
-            board.save()
-        }
-        catch(error) {
-            return Error("Error adding board to user")
-        }
-    }
-    let array = []
-    for (let memberId of membersIds) {
-        array.push(addMember(memberId))
-    }
-    // TODO: finish implementation
-}
 
 BoardController.addList = async(boardId, listId) => {
     const query = {_id: boardId}
