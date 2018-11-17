@@ -67,4 +67,26 @@ CardController.addMember= async (cardId, username) => {
         return member
     }
 }
+
+CardController.addFile = async (cardId, name, url) => {
+    const query = {'_id': cardId}
+    const update = {
+        $addToSet: {
+            attachments: {
+                name: name,
+                owner: null,
+                size: 0,
+                pos: 0,
+                url: url
+            }
+        } 
+    }
+    const options = {new: true, upsert: true}
+    const newCard = await Card.findOneAndUpdate(query, update, options)
+    const io=require('../index').io
+        io.to(newCard.board).emit("action",{type:"CARD_UPDATED_SUCCESS",
+        card: newCard})
+    return newCard
+}
+
 module.exports = CardController;
