@@ -3,7 +3,6 @@
  */
 const express         = require('express'),
       bodyParser      = require('body-parser'),
-      cookieParser    = require('cookie-parser'),
       dotenv          = require('dotenv'),
       mongoose        = require('mongoose'),
       helmet          = require('helmet'),
@@ -21,7 +20,6 @@ process.env.SECRET_KEY = uuid.v4();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 app.use(cors())
 
