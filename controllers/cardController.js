@@ -26,7 +26,9 @@ CardController.update = async(card) => {
 
 CardController.create = async(cardData,listId) => {
     try {
+        
         const newCard = new Card(cardData)
+        newCard.description="Enter your description here"
         await ListController.addCard(listId, newCard.id)
         const card=await newCard.save()
         const io=require('../index').io

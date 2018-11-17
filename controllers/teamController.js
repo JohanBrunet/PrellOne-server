@@ -7,11 +7,12 @@ let TeamController = () => {}
 
 TeamController.addBoard = async(teamId, boardId) => {
     const team = await Team.findById(teamId)
+    console.log(team)
         try {
             if (!team.boards.some(oldBoardId => oldBoardId.equals(boardId))){
                 team.boards.push(boardId)
             }
-            team.save()
+            return team.save()
         }
         catch(error) {
             return Error("Error adding board to team")

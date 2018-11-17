@@ -28,10 +28,14 @@ LabelController.create = async(labelData,boardId) => {
     }
 }
 
-LabelController.update = (newLabel) => {
+LabelController.update = async(newLabel) => {
     const query = {'_id': newLabel.id}
     const options = {new: true, upsert: true}
-    return Label.findOneAndUpdate(query, newLabel, options)
+    updatedLabel =await Label.findOneAndUpdate(query, newLabel, options)
+    const io=require('../index').io
+        io.to(updatedLabel.board).emit("action",{type:"TITLE_LABEL_UPDATED_SUCCESS",
+        label:updatedLabel})
+    return updatedLabel
 }
 
 module.exports = LabelController;

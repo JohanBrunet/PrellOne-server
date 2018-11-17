@@ -54,6 +54,10 @@ UserController.updatePassword = async(userId, oldPwd, newPwd) => {
     
 }
 
+UserController.hasBoard = async(user, boardId) => {
+    console.log(user.boards.some(oldBoardId => oldBoardId.equals(boardId)))
+    return user.boards.some(oldBoardId => oldBoardId.equals(boardId))
+}
 
 UserController.addBoard = async(userId, boardId) => {
     const user = await User.findById(userId)
