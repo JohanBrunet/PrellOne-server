@@ -43,7 +43,7 @@ module.exports.doAuthentication = async (credential, password, withLdap = false)
         }
     }
     else {
-        let user = await userController.getByEmail(credential, true) || await userController.getByUsername(credential, true)
+        let user = await userController.getUserLogin(credential)
         if (!user || user.length == 0) {
             throwError(401, 'Invalid credentials')
         }
