@@ -5,16 +5,12 @@ const throwError = require('../utils/throwError')
 
 let UserController = () => {}
 
-UserController.getByEmail = (em, withPassword = false) => {
-    if (withPassword) return User.findOne({email: em}).select("+password")
-    else return User.findOne({email: em})
+UserController.getUserLogin = (cred) => {
+    return User.findOne({ $or: [{username: cred}, {email: cred}]}).select("+password")
 }
 
-UserController.getByUsername = (uname, withPassword = false) => {
-    if (withPassword) return User.findOne({username: uname}).select("+password")
-    
-    else {console.log(uname); return User.findOne({username: uname}).exec()
-}
+UserController.getByUsername = (uname) => {
+    return User.findOne({username: uname})
 }
 
 UserController.getById = (id) => {
