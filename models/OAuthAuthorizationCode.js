@@ -6,8 +6,10 @@ const OAuthAuthorizationCode = new Schema({
     expiresOn: Date,
     redirectUri: String,
     scope: String,
-    client: { type: Schema.Types.ObjectId, ref: 'OAuthClient' },
-    user: { type: Schema.Types.ObjectId, ref: 'User' }
+    client: { 
+        id: { type: String }
+    },
+    user: { type: Object }
 })
 
 

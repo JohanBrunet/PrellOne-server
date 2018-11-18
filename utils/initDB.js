@@ -47,7 +47,7 @@ module.exports.initDB = async () => {
 const seedCollections = async() => {
     const PrellOneClient = {
         name: 'PrellOne-API',
-        clientId: process.env.OAUTH_CLIENTID_PRELLONE,
+        id: process.env.OAUTH_CLIENTID_PRELLONE,
         clientSecret: process.env.OAUTH_SECRET_PRELLONE,
         redirectUris: ['http://localhost:5000/oauth/redirected'],
         grants: ['password', 'authorization_code']
