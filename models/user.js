@@ -73,11 +73,5 @@ UserSchema.options.toJSON = {
     }
 }
 
-let User
-try {
-    User = mongoose.model('User', UserSchema)
-}
-catch(e) {
-    User = mongoose.model('User')
-}
-module.exports = User
+mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User')

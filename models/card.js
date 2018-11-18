@@ -82,11 +82,5 @@ CardSchema.options.toJSON = {
     }
 }
 
-let Card
-try {
-    Card = mongoose.model('Card', CardSchema)
-} 
-catch (e) {
-    Card = mongoose.model('Card')
-}
-module.exports = Card;
+mongoose.model('Card', CardSchema)
+module.exports = mongoose.model('Card')

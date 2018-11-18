@@ -26,11 +26,5 @@ LabelSchema.options.toJSON = {
     }
 }
 
-let Label
-try {
-    Label = mongoose.model('Label', LabelSchema)
-}
-catch(e) {
-    Label = mongoose.model('Label')
-}
-module.exports = Label;
+mongoose.model('Label', LabelSchema)
+module.exports = mongoose.model('Label')
