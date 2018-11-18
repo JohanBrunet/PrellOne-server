@@ -7,7 +7,7 @@ const labelController = require('../controllers/labelController');
 
 
 /* GET ALL LABELS */
-router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/',  auth, asyncWrapper( async(req, res, next) => {
     const labels = await labelController.getAll()
     res.type('application/json')
     res.status(200)
@@ -15,7 +15,7 @@ router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
 }))
 
 /* GET SINGLE LABEL BY ID */
-router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/:id',  auth, asyncWrapper( async(req, res, next) => {
     const label = await labelController.getById(req.params.id)
     res.type('application/json')
     res.status(200)
@@ -23,7 +23,7 @@ router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
 }))
 
 /*CREATE LABEL*/
-router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     const newLabel = req.body
     const boardId=req.body.boardId
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
@@ -33,7 +33,7 @@ router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(label)
 }))
 
-router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/', auth, asyncWrapper( async(req, res, next) => {
     const updatedLabel=req.body
     const label= await labelController.update(updatedLabel)
     res.type('application/json')

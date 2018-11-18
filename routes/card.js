@@ -20,7 +20,7 @@ const content = {
 
 
 /* GET ALL CARDS */
-router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/',  auth, asyncWrapper( async(req, res, next) => {
     const cards = await cardController.getAll()
     res.type('application/json')
     res.status(200)
@@ -28,14 +28,14 @@ router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
 }))
 
 /* GET SINGLE CARD BY ID */
-router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/:id',  auth, asyncWrapper( async(req, res, next) => {
     const card= await cardController.getById(req.params.id)
     res.type('application/json')
     res.status(200)
     res.json(card)
 }))
 /* CREATE A NEW CARD */
-router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     const newCard = req.body
     const listId = req.body.list
     const card = await cardController.create(newCard,listId)
@@ -44,7 +44,7 @@ router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
-router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/', auth, asyncWrapper( async(req, res, next) => {
     const updatedCard=req.body
     const card = await cardController.update(updatedCard)
     res.type('application/json')
@@ -52,7 +52,7 @@ router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
-router.put('/updateDesc',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/updateDesc', auth, asyncWrapper( async(req, res, next) => {
     const desc=req.body.desc
     const idCard=req.body.idCard
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
@@ -62,7 +62,7 @@ router.put('/updateDesc',/* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
-router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/addMember', auth, asyncWrapper( async(req, res, next) => {
     const username = req.body.username
     const cardId = req.body.cardId
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
@@ -74,7 +74,7 @@ router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(member)
 }))
 
-router.post('/attachFile',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.post('/attachFile', auth, asyncWrapper( async(req, res, next) => {
     aws.uploadFileByStream(req, res, async (err, data) => {
         if (err){
             console.log(err)
@@ -97,7 +97,7 @@ router.post('/attachFile',/* auth, */ asyncWrapper( async(req, res, next) => {
     })
 }))
 
-router.get('/file/:fileName',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/file/:fileName', auth, asyncWrapper( async(req, res, next) => {
     console.log("Received request to download :")
     console.log(req.params.fileName)
     aws.download(req.params.fileName, res, (err, data) => {

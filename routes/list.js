@@ -6,7 +6,7 @@ const asyncWrapper = require('../middlewares/asyncWrapper')
 const ListController = require('../controllers/listController');
 
 /* GET ALL LISTS*/
-router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/',  auth, asyncWrapper( async(req, res, next) => {
     const lists = await ListController.getAll();
     res.type('application/json');
     res.status(200);
@@ -14,14 +14,14 @@ router.get('/', /* auth, */ asyncWrapper( async(req, res, next) => {
 }));
 
 /* GET SINGLE LIST BY ID */
-router.get('/:id', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.get('/:id',  auth, asyncWrapper( async(req, res, next) => {
     const list = await ListController.getById(req.params.id);
     res.type('application/json');
     res.status(200);
     res.json(list);
 }));
 
-router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
+router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     const newList = req.body;
     const boardId = req.body.board;
     const list = await ListController.create(newList,boardId);
@@ -30,14 +30,14 @@ router.post('/', /* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(list);
 }))
 
-router.put('/',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/', auth, asyncWrapper( async(req, res, next) => {
     const updatedList = req.body
     const list = await ListController.update(updatedList)
     res.type('application/json')
     res.status(200)
     res.json(list)
 }))
-router.put('/title',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/title', auth, asyncWrapper( async(req, res, next) => {
     const updatedList = req.body
     const list = await ListController.updateTitle(updatedList)
     res.type('application/json')

@@ -54,7 +54,7 @@ router.post('/', auth, asyncWrapper( async(req, res, next) => {
     res.json(board)
 }))
 
-router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/addMember', auth, asyncWrapper( async(req, res, next) => {
     const username = req.body.username
     const boardId = req.body.boardId
     const member = await BoardController.addMember(boardId,username/*,owner.id*/)
@@ -63,7 +63,7 @@ router.put('/addMember',/* auth, */ asyncWrapper( async(req, res, next) => {
     res.json(member)
 }))
 
-router.put('/addTeam',/* auth, */ asyncWrapper( async(req, res, next) => {
+router.put('/addTeam', auth, asyncWrapper( async(req, res, next) => {
     const name = req.body.name
     const boardId = req.body.boardId
     const team = await BoardController.addTeam(boardId,name)
