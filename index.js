@@ -8,8 +8,8 @@ const express         = require('express'),
       helmet          = require('helmet'),
       uuid            = require('uuid'),
       cors            = require('cors');
-      http = require('http')
-      socketServer =require('socket.io')
+      http            = require('http')
+      socketServer    =require('socket.io')
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use(cors())
 app.use(helmet());
 
 // Load environment variables from .env file
-dotenv.load();
+dotenv.load()
 
 //Load app configuration
 const appConfig = require('./config/api')
