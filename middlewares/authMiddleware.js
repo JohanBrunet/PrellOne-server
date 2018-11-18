@@ -16,8 +16,8 @@ const throwError = require('../utils/throwError')
 module.exports.doAuthentication = async (credential, password, withLdap = false) => {
     if (withLdap) {
         try {
-            const ldapUser = await ldap.find(credential, password)
-            await ldap.auth(ldapUser, password)
+            // const ldapUser = await ldap.find(credential, password)
+            await ldap.auth(credential, password)
             let user = await userController.getByUsername(credential)
             if (!user || user.length == 0) {
                 let [fn, ln] = credential.split('.')
