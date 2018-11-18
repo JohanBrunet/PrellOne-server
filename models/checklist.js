@@ -55,12 +55,5 @@ ChecklistSchema.options.toJSON = {
     }
 }
 
-let Checklist
-try {
-    Checklist = mongoose.model('Checklist', ChecklistSchema)
-}
-catch(e) {
-    Checklist = 
-    mongoose.model('Checklist')
-}
-module.exports = Checklist;
+mongoose.model('Checklist', ChecklistSchema)
+module.exports = mongoose.model('Checklist')
