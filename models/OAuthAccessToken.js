@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-var OAuthAccessTokenSchema = new Schema({
+const OAuthAccessTokenSchema = new Schema({
     accessToken: { type: String },
     accessTokenExpiresOn: { type: Date },
-    client: { type: Schema.Types.ObjectId, ref: "OAuthClient" },
-    user: { type: Schema.Types.ObjectId, ref: "User" }
+    client: {
+        id: { type: String }
+    },
+    user: { type: Object }
 })
 
 mongoose.model('OAuthAccessToken', OAuthAccessTokenSchema)
