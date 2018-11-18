@@ -12,7 +12,7 @@ module.exports.initDB = async () => {
             const fileName = file.replace('.js', '')
             const collections = await mongoose.connection.db.listCollections().toArray()
             const collectionsNames = collections.map( col => col.name )
-            if(!collectionsNames.includes(fileName + 's')) {
+            if(!collectionsNames.includes(fileName.toLowerCase() + 's')) {
                 try {
                     const model = require(`.${dirpath}/${fileName}`)
                     models[fileName] = model
@@ -24,9 +24,9 @@ module.exports.initDB = async () => {
                 }
             }
         }
-        if (process.env.NODE_ENV != 'production' && Object.keys(models).length) {
+        if (process.env.NODE_ENV !== 'production' && Object.keys(models).length) {
             try {
-                await seedCollections(models)
+                await seedCollectionsDev()
                 console.log(`The database has been seeded`)
             }
             catch(error) {
@@ -34,10 +34,28 @@ module.exports.initDB = async () => {
                 console.error(error)
             }
         }
+        if (Object.keys(models).length) {
+            try {
+                await seedCollections()
+            }
+            catch(error) {
+            }
+        }
     })
 }
 
-seedCollections = async() => {
+const seedCollections = async() => {
+    const PrellOneClient = {
+        name: 'PrellOne-API',
+        clientId: process.env.OAUTH_CLIENTID_PRELLONE,
+        clientSecret: process.env.OAUTH_SECRET_PRELLONE,
+        redirectUris: ['http://localhost:5000/oauth/redirected'],
+        grants: ['password', 'authorization_code']
+    }
+    await models.OAuthClient.create(PrellOneClient)
+}
+
+const seedCollectionsDev = async() => {
 
     console.log('Seeding database...')
 
