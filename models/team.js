@@ -36,11 +36,5 @@ TeamSchema.options.toJSON = {
     }
 }
 
-let Team
-try {
-    Team = mongoose.model('Team', TeamSchema)
-}
-catch(e) {
-    Team = mongoose.model('Team')
-}
-module.exports = Team;
+mongoose.model('Team', TeamSchema)
+module.exports = mongoose.model('Team')

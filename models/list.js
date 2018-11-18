@@ -51,11 +51,5 @@ ListSchema.options.toJSON = {
     }
 }
 
-let List
-try {
-    List = mongoose.model('List', ListSchema)
-}
-catch(e) {
-    List = mongoose.model('List')
-}
-module.exports = List;
+mongoose.model('List', ListSchema)
+module.exports = mongoose.model('List')
