@@ -5,6 +5,7 @@ const boardController=require('./boardController')
 
 let TeamController = () => {}
 
+/*ADD BOARD TO TEAM*/
 TeamController.addBoard = async(teamId, boardId) => {
     const team = await Team.findById(teamId)
     console.log(team)
@@ -20,25 +21,30 @@ TeamController.addBoard = async(teamId, boardId) => {
     }
 
 
+/*GET TEAM BY ID*/
 TeamController.getById = async(id) => {
     return await Team.findById(id).populate('members')
                                 
 }
 
+/*GET ALL TEAM*/
 TeamController.getAll = async() => {
     return await Team.find();
 }
 
+/*GET TEAM BY NAME*/
 TeamController.getByName = (name) => {
     return Team.findOne({name: name}).populate('members')
 }
 
+/*UPDATE TEAM*/
 TeamController.update = (team) => {
     const query = {'_id': team.id}
     const options = {new: true, upsert: true}
     return Team.findOneAndUpdate(query, team, options)
 }
 
+/*CREATE A TEAM*/
 TeamController.create = async(teamData,ownerId) => {
     try {
         const newTeam = await new Team(teamData)
@@ -49,7 +55,7 @@ TeamController.create = async(teamData,ownerId) => {
         throwError(500, error)
     }
 }
-
+/*ADD MEMBER TO TEAM*/
 TeamController.addMember= async (teamId, username) => {
     const query = {_id: teamId}
     const member = await userController.getByUsername(username)

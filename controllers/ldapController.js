@@ -9,6 +9,7 @@ const ldapClient = ldap.createClient({
 
 let LdapController = () => { }
 
+/*AUTHENTIFICATION LDAP*/
 LdapController.auth = (cred, pwd) => {
     return new Promise( (resolve, reject) => {
         const ldapOU = env.LDAP_USER.split('.').lenght === 1 ? env.LDAP_OU_PERM : env.LDAP_OU_ETU

@@ -21,6 +21,7 @@ router.get('/:id',  auth, asyncWrapper( async(req, res, next) => {
     res.json(list);
 }));
 
+/*CREATE A LIST*/
 router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     const newList = req.body;
     const boardId = req.body.board;
@@ -30,6 +31,7 @@ router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     res.json(list);
 }))
 
+/*UPDATE LIST*/
 router.put('/', auth, asyncWrapper( async(req, res, next) => {
     const updatedList = req.body
     const list = await ListController.update(updatedList)
@@ -37,6 +39,8 @@ router.put('/', auth, asyncWrapper( async(req, res, next) => {
     res.status(200)
     res.json(list)
 }))
+
+/*UPDATE TITLE LIST*/
 router.put('/title', auth, asyncWrapper( async(req, res, next) => {
     const updatedList = req.body
     const list = await ListController.updateTitle(updatedList)

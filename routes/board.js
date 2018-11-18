@@ -41,13 +41,12 @@ router.get('/:id/lists', auth, asyncWrapper( async(req, res, next) => {
     res.json(lists)
 }))
 
-
+/*CREATE A NEW BOARD*/
 router.post('/', auth, asyncWrapper( async(req, res, next) => {
     const newBoard = req.body
     const team=req.body.team
     const token = req.get('Authorization').split(' ')[1]
     const owner = decodeToken(token)
-    console.log(owner)
     const board = await BoardController.create(newBoard ,owner,team)
     res.type('application/json')
     res.status(200)

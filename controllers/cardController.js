@@ -5,15 +5,18 @@ const throwError = require('../utils/throwError')
 
 let CardController = () => {}
 
+/*GET CARD BY ID*/
 CardController.getById = async(id) => {
     return await Card.findById(id).populate('members')
                                 
 }
 
+/*GET ALL CARD*/
 CardController.getAll = async() => {
     return await Card.find();
 }
 
+/*UPDATE A CARD*/
 CardController.update = async(card) => {
     const query = {'_id': card.id}
     const options = {new: true, upsert: true}
@@ -24,9 +27,9 @@ CardController.update = async(card) => {
     return newCard
 }
 
+/*CREATE A CARD*/
 CardController.create = async(cardData,listId) => {
     try {
-        
         const newCard = new Card(cardData)
         newCard.description="Enter your description here"
         await ListController.addCard(listId, newCard.id)
@@ -41,6 +44,7 @@ CardController.create = async(cardData,listId) => {
     }
 }
 
+/*UPDATE DESC CARD*/
 CardController.updateDesc=(desc,cardId)=>{
     const query = {_id: cardId}
     const update = {
@@ -52,6 +56,7 @@ CardController.updateDesc=(desc,cardId)=>{
     return Card.findByIdAndUpdate(query, update, options)
 }
 
+/*ADD MEMBER CARD*/
 CardController.addMember= async (cardId, username) => {
     const query = {_id: cardId}
     const member = await UserController.getByUsername(username)
@@ -70,6 +75,7 @@ CardController.addMember= async (cardId, username) => {
     }
 }
 
+/*ADD FILE CARD*/
 CardController.addFile = async (cardId, name, url) => {
     const query = {'_id': cardId}
     const update = {

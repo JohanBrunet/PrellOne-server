@@ -4,6 +4,7 @@ const asyncWrapper = require('../middlewares/asyncWrapper');
 const userController = require('../controllers/userController');
 
     
+    /*LOG IN CLASSICAL*/
     router.post('/login', asyncWrapper( async(req, res, next) => {
         const result = await authenticate(req.body.credential, req.body.password)
 
@@ -11,6 +12,8 @@ const userController = require('../controllers/userController');
         res.status(200);
         return res.json(result);
     }))
+
+    /*LOGIN POLYTECH*/
     router.post('/login/polytech', asyncWrapper( async(req, res, next) => {
         const result = await authenticate(req.body.credential, req.body.password, true)
 
@@ -19,15 +22,16 @@ const userController = require('../controllers/userController');
         return res.json(result);
     }))
 
+    /*CREATE A USER*/
     router.post('/register', asyncWrapper( async(req, res, next) => {
         let newUser = req.body;
         let newUserSaved = await userController.create(newUser);
-        console.log(newUserSaved)
         res.type('text/html');
         res.status(201)
         return res.send()
     }));
 
+    /*LOG OUT*/
     router.get('/logout', (req, res) => {
         res.cookie('prellone', '', {maxAge: 0});
         res.type('text/html');

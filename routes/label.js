@@ -33,6 +33,7 @@ router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     res.json(label)
 }))
 
+/*UPDATE A LABEL*/
 router.put('/', auth, asyncWrapper( async(req, res, next) => {
     const updatedLabel=req.body
     const label= await labelController.update(updatedLabel)

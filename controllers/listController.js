@@ -6,22 +6,26 @@ const throwError = require('../utils/throwError')
 
 let ListController = () => {}
 
+/*GET LIST BY ID*/
 ListController.getById = async(id) => {
     return await List.findById(id).populate('cards')
                                   .populate('labels')
                                   .populate('users')
 }
 
+/*GET ALL LIST OF A BOARD*/
 ListController.getAll = async(boardId) => {
     return await List.find({board: boardId}).populate('cards')
                                       .populate('labels')
 }
 
+/*GET ALL LIST*/
 ListController.getAll = async() => {
     return await List.find().populate('cards')
                             .populate('labels')
 }
 
+/*CREATE LIST*/
 ListController.create = async(listData,boardId) => {
     try {
         const newList = new List(listData)
@@ -37,6 +41,7 @@ ListController.create = async(listData,boardId) => {
     }
 }
 
+/*UPDATE LIST*/
 ListController.update = async (list) => {
     const query = {'_id': list.id}
     const options = {new: true, upsert: true}
@@ -47,6 +52,8 @@ ListController.update = async (list) => {
         list:newList})
     return newList
 }
+
+/*UPDATE TITLE LSIT*/
 ListController.updateTitle = async (list) => {
     const query = {'_id': list.id}
     const options = {new: true, upsert: true}
@@ -57,6 +64,7 @@ ListController.updateTitle = async (list) => {
     return newList
 }
 
+/*ADD CARD TO LIST */
 ListController.addCard = async(listId, cardId) => {
     const query = {_id: listId}
     const update = {

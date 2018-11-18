@@ -44,6 +44,7 @@ router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
+/*UPDATE CARD*/
 router.put('/', auth, asyncWrapper( async(req, res, next) => {
     const updatedCard=req.body
     const card = await cardController.update(updatedCard)
@@ -52,6 +53,7 @@ router.put('/', auth, asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
+/*UPDATE DESC CARD*/
 router.put('/updateDesc', auth, asyncWrapper( async(req, res, next) => {
     const desc=req.body.desc
     const idCard=req.body.idCard
@@ -62,48 +64,38 @@ router.put('/updateDesc', auth, asyncWrapper( async(req, res, next) => {
     res.json(card)
 }))
 
+/*ADD MEMBER CARD */
 router.put('/addMember', auth, asyncWrapper( async(req, res, next) => {
     const username = req.body.username
     const cardId = req.body.cardId
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
     const member = await cardController.addMember(cardId, username/*,owner.id*/)
-    console.log("FOUND MEMBER")
-    console.log(member)
     res.type('application/json')
     res.status(200)
     res.json(member)
 }))
 
+/*ADD ATTACHED FILE TO A CARD*/
 router.post('/attachFile', auth, asyncWrapper( async(req, res, next) => {
     aws.uploadFileByStream(req, res, async (err, data) => {
         if (err){
-            console.log(err)
             res.status(400).send("Bad request")
         }
         else {
-            console.log(req.body)
             const url = req.file.location;
             const name = req.file.key
             const cardId = req.body.cardId
-            console.log("URL :")
-            console.log(url)
-            console.log("Name :")
-            console.log(name)
-            console.log("Card Id :")
-            console.log(cardId)
             const card = await cardController.addFile(cardId, name, url)
             res.status(200).send(card) //return card     
         }
     })
 }))
 
+/*GET FILE BY ITS FILENAME*/
 router.get('/file/:fileName', auth, asyncWrapper( async(req, res, next) => {
-    console.log("Received request to download :")
-    console.log(req.params.fileName)
     aws.download(req.params.fileName, res, (err, data) => {
         if (err)
             {
-                console.log(err)
                 res.status(400).send(err.message)
             }
         else {

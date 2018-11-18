@@ -19,8 +19,8 @@ router.get('/:id',  auth, asyncWrapper( async(req, res, next) => {
     res.status(200)
     res.json(team)
 }))
-/*POST A NEW TEAM*/
 
+/*POST A NEW TEAM*/
 router.post('/',  auth, asyncWrapper( async(req, res, next) => {
     const newTeam=req.body
     const token = req.get('Authorization').split(' ')[1]
@@ -32,7 +32,6 @@ router.post('/',  auth, asyncWrapper( async(req, res, next) => {
 }))
 
 /*PUT A TEAM*/
-
 router.put('/',  auth, asyncWrapper( async(req, res, next) => {
     const updatedTeam=req.body
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
@@ -42,13 +41,12 @@ router.put('/',  auth, asyncWrapper( async(req, res, next) => {
     res.json(team)
 }))
 
+/*ADD A MEMBER TO THE TEAM */
 router.put('/addMember', auth, asyncWrapper( async(req, res, next) => {
     const username = req.body.username
     const teamId = req.body.id
     //const owner = decodeToken(req.cookies.prellone.appAuthToken)
     const member = await TeamController.addMember(teamId,username/*,owner.id*/)
-    console.log("FOUND MEMBER")
-    console.log(member)
     res.type('application/json')
     res.status(200)
     res.json(member)

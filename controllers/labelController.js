@@ -5,18 +5,19 @@ const BoardController=require('../controllers/boardController')
 
 let LabelController = () => {}
 
+/*GET LABEL BY ID*/
 LabelController.getById = (id) => {
     return Label.findById(id)
 }
-
+/*GET ALL LABEL OF A BOARD*/
 LabelController.getAll = (boardId) => {
     return Label.find({board: boardId})
 }
-
+/*GET ALL LABEL*/
 LabelController.getAll = () => {
     return Label.find()
 }
-
+/*CREATE LABEL*/
 LabelController.create = async(labelData,boardId) => {
     try {
         const newLabel = new Label(labelData)
@@ -27,7 +28,7 @@ LabelController.create = async(labelData,boardId) => {
         throwError(500, error)
     }
 }
-
+/*UPDATE A LABEL */
 LabelController.update = async(newLabel) => {
     const query = {'_id': newLabel.id}
     const options = {new: true, upsert: true}

@@ -5,18 +5,18 @@ const throwError = require('../utils/throwError')
 const Label = require('../models/label')
 
 let BoardController = () => { }
-
+/*GET A BOARD BY ID*/
 BoardController.getById = async (id) => {
     return await Board.findById(id).populate({ path: 'lists', populate: { path: 'cards' } })
         .populate('members')
         .populate({ path: 'teams', populate: { path: 'members' } })
         .populate('labels')
 }
-
+/*GET ALL BOARD*/
 BoardController.getAll = async () => {
     return await Board.find();
 }
-
+/*CREATE A BOARD*/
 BoardController.create = async (boardData, ownerId, team = null) => {
     let user = null
     let newBoard
@@ -60,12 +60,14 @@ BoardController.create = async (boardData, ownerId, team = null) => {
     }
 }
 
+/*UPDATE A BOARD*/
 BoardController.update = (board, data) => {
     const query = { 'id': board.id }
     const options = { new: true, upsert: true }
     return Board.findOneAndUpdate(query, data, options)
 }
 
+/*ADD MEMBER TO BOARD*/
 BoardController.addMember = async (boardId, username) => {
     const query = { _id: boardId }
     const member = await userController.getByUsername(username)
@@ -96,6 +98,7 @@ BoardController.addMember = async (boardId, username) => {
     }
 }
 
+/*ADD TEAM TO BOARD*/
 BoardController.addTeam = async (boardId, name) => {
     const query = { _id: boardId }
     const team = await teamController.getByName(name)
@@ -123,7 +126,7 @@ BoardController.addTeam = async (boardId, name) => {
     }
 }
 
-
+/*ADD LIST TO BOARD*/
 BoardController.addList = async (boardId, listId) => {
     const query = { _id: boardId }
     const update = {
@@ -134,6 +137,8 @@ BoardController.addList = async (boardId, listId) => {
     const options = { new: true, upsert: true }
     return await Board.findOneAndUpdate(query, update, options)
 }
+
+/*ADD LABEL*/
 BoardController.addLabel = async (boardId, labelId) => {
     const query = { _id: boardId }
     const update = {

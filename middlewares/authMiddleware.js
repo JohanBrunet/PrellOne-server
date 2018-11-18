@@ -7,12 +7,7 @@ const userController = require('../controllers/userController');
 const ldap = require('../controllers/ldapController')
 const throwError = require('../utils/throwError')
 
-/**
- * Authenticate the user from the browser
- * @param req
- * @param res
- * @param next
- */
+/* AUTHENTICATE THE USER FROM THE BROWSER*/
 module.exports.doAuthentication = async (credential, password, withLdap = false) => {
     if (withLdap) {
         try {
@@ -60,9 +55,7 @@ module.exports.doAuthentication = async (credential, password, withLdap = false)
     }
 }
 
-/**
- * check if user is already authenticated
- */
+/*CHECK IF THE USER IS ALREADY AUTHENTICATED*/
 module.exports.isAuthenticated = (req, res, next) => {
     try {
         const header = req.get('Authorization')
