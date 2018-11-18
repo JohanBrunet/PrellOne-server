@@ -1,9 +1,9 @@
 const ldap = require('ldapjs')
 const env = process.env
 
-// const ldapClient = ldap.createClient({
-//     url: `${env.LDAP_HOST}:${env.LDAP_PORT}`
-// })
+const ldapClient = ldap.createClient({
+    url: `${env.LDAP_HOST}:${env.LDAP_PORT}`
+})
 
 let LdapController = () => {}
 
@@ -12,7 +12,7 @@ LdapController.find = async(cred) => {
         const knownUser = `cn=${env.LDAP_USER},${env.LDAP_USER_OU},${env.LDAP_OU},${env.LDAP_DC}`
         const knownUserPwd = env.LDAP_PWD
         ldapClient.bind(knownUser, knownUserPwd, (err) => {
-            if (err) reject(err)
+            if (err) return reject(err)
             else {
                 var opts = {
                     filter: `(cn=${cred})`,
@@ -21,10 +21,10 @@ LdapController.find = async(cred) => {
         
                 ldapClient.search(`${env.LDAP_OU},${env.LDAP_DC}`, opts, function (err, res) {
                     if (err) {
-                        reject(err)
+                        return reject(err)
                     } else {
                         res.on('searchEntry', function (entry) {
-                            resolve(entry.objectName)
+                            return resolve(entry.objectName)
                         });
                     }
                 })
@@ -36,8 +36,8 @@ LdapController.find = async(cred) => {
 LdapController.auth = async(dn, pwd) => {
     return await new Promise( (resolve, reject) => {
         ldapClient.bind(dn, pwd, (err) => {
-            if (err) reject(err)
-            else resolve()
+            if (err) return reject(err)
+            else return resolve()
         })
     })
 }
